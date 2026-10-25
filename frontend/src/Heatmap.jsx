@@ -109,8 +109,8 @@ export function Heatmap({ days, selectedDay, onSelectDay }) {
             className="chart-tip"
             data-flip={active?.d > last / 2 || undefined}
             style={{
-              left: `calc(2.5rem + (100% - 2.5rem) * ${((active?.d ?? 0) + 0.5) / days.length})`,
-              top: `${((active?.h ?? 0) + 1) * 16}px`,
+              '--x': `calc(2.5rem + (100% - 2.5rem) * ${((active?.d ?? 0) + 0.5) / days.length})`,
+              '--y': `${((active?.h ?? 0) + 1) * 16}px`,
             }}
             hidden={!cell}
             aria-live="polite"

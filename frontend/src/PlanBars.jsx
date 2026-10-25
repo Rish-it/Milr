@@ -117,7 +117,7 @@ export function PlanBars({ confidence, selectedDay, onSelectDay }) {
             <div
               className="chart-tip"
               data-flip={active > last / 2 || undefined}
-              style={{ left: `${((active ?? 0) + 0.5) * (100 / data.length)}%` }}
+              style={{ '--x': `${((active ?? 0) + 0.5) * (100 / data.length)}%` }}
               hidden={!day}
               aria-live="polite"
             >

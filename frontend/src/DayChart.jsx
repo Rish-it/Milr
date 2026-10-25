@@ -105,7 +105,7 @@ function Plot({ hours, label }) {
       <div
         className="chart-tip"
         data-flip={active > last / 2 || undefined}
-        style={{ left: `${x(active ?? 0)}%` }}
+        style={{ '--x': `${x(active ?? 0)}%` }}
         hidden={!hour}
         aria-live="polite"
       >

@@ -102,6 +102,7 @@ body {
 }
 .chart-tip {
   top: 0;
+  left: var(--x);
   z-index: 1;
   display: grid;
   gap: 4px;
@@ -193,7 +194,7 @@ body {
   color: var(--color-on-accent);
 }
 .heat .chart-tip {
-  top: auto;
+  top: var(--y);
 }
 @media (prefers-reduced-motion: reduce) {
   .heat-cell {
@@ -287,6 +288,22 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .bar-seg {
     transition: none;
+  }
+}
+
+/* Phones: the tooltip docks full width above the plot, where a finger on the plot doesn't cover it and the card doesn't
+   clip it. */
+@media (max-width: 640px) {
+  .chart-tip,
+  .chart-tip[data-flip],
+  .bars .chart-tip,
+  .heat .chart-tip {
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: calc(100% + 8px);
+    min-width: 0;
+    transform: none;
   }
 }
 
