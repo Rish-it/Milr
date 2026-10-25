@@ -1,0 +1,21 @@
+frontend/src/DayChart.jsx
+  s_01a117c046b873::t_c398e3be630a07 10
+frontend/src/format.js
+  s_01a117c046b873::t_c398e3be630a07 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0ec339369a073b75ddacf393d6932b8457706dbf",
+  "prompts": {},
+  "sessions": {
+    "s_01a117c046b873": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e2e841a1-1d5a-493f-b76c-67c6e55a667d",
+        "model": "unknown"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
