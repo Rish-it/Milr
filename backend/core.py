@@ -76,9 +76,14 @@ def plan(compared, day, confidence):
     return today
 
 
+def plan_month(compared, confidence):
+    """Every day's hours with its plan, each day planned as it would have been at its own decision time."""
+    return pd.concat(plan(compared, day, confidence) for day in compared.day.unique())
+
+
 def backtest(compared, confidence):
     """Walk forward through the month: how often planning on the raw forecast vs the plan left wind short."""
-    planned = pd.concat(plan(compared, day, confidence) for day in compared.day.unique()).dropna(subset=["plan"])
+    planned = plan_month(compared, confidence).dropna(subset=["plan"])
     result = {"hours": len(planned), "avg_margin_mw": round((planned.forecast - planned.plan).mean())}
     for basis in ("forecast", "plan"):
         result[basis] = {
