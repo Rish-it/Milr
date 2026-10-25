@@ -201,6 +201,95 @@ body {
   }
 }
 
+/* Daily plan bars: each segment is its own box; bars not being read step back toward the card, never by opacity. */
+.bars-frame {
+  margin: 8px 0 0 48px;
+}
+.bars-frame[aria-busy] .bar-seg {
+  --strength: 60%;
+}
+.bars {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--bars), minmax(0, 1fr));
+  gap: 4px;
+  height: 240px;
+  touch-action: pan-y;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.bars:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+.bars-x {
+  display: grid;
+  grid-template-columns: repeat(var(--bars), minmax(0, 1fr));
+  gap: 4px;
+}
+.bar {
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
+  border-radius: 4px;
+}
+.bar[data-lit] {
+  background: var(--color-overlay-hover);
+}
+.bar-seg,
+.bar-key {
+  --seg: var(--chart-plan);
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--seg) var(--strength, 100%), var(--color-background-card));
+}
+.bar-seg {
+  transition: height 300ms ease-out calc(var(--i) * 12ms);
+}
+.bar-key {
+  width: 14px;
+  height: 14px;
+}
+.margin {
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--seg) var(--strength, 100%), var(--color-background-card)) 0 2px,
+    transparent 2px 5px
+  );
+}
+.unplanned {
+  --seg: color-mix(in oklab, var(--chart-forecast) 45%, var(--color-background-card));
+}
+.bar-actual,
+.bar-key.actual {
+  --seg: var(--chart-actual);
+}
+.bar-actual {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  height: 3px;
+  transform: translateY(50%);
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--seg) var(--strength, 100%), var(--color-background-card));
+  box-shadow: 0 0 0 2px var(--color-background-card);
+}
+.bar-key.actual {
+  height: 3px;
+}
+.bars[data-active] .bar:not([data-lit]) {
+  --strength: 35%;
+}
+.bars .chart-tip {
+  top: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar-seg {
+    transition: none;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
