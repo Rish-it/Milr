@@ -1,0 +1,21 @@
+frontend/src/app.css
+  s_01a117c046b873::t_fa5f518cbd0ed0 179-180,199,201-204,212-213,217
+frontend/src/Heatmap.jsx
+  s_01a117c046b873::t_fa5f518cbd0ed0 10,15,53-55,60-62,64-67,71,102
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9c7cff418b7cf7f2678e8e3bd5d88eaa567f1f90",
+  "prompts": {},
+  "sessions": {
+    "s_01a117c046b873": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e2e841a1-1d5a-493f-b76c-67c6e55a667d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
