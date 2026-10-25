@@ -1,0 +1,29 @@
+frontend/index.html
+  s_01a117c046b873::t_40844286bc9a8a 1-13
+frontend/src/main.jsx
+  s_01a117c046b873::t_40844286bc9a8a 1-8
+frontend/package.json
+  s_01a117c046b873::t_4a9d58b9ed7691 1-18
+frontend/vite.config.js
+  s_01a117c046b873::t_40844286bc9a8a 1-6
+.gitignore
+  s_01a117c046b873::t_40844286bc9a8a 4-5
+frontend/package-lock.json
+  s_01a117c046b873::t_a44f6ff5883bad 1-888
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3d404fd25517dee27691c20a539f0af6608bf4ae",
+  "prompts": {},
+  "sessions": {
+    "s_01a117c046b873": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e2e841a1-1d5a-493f-b76c-67c6e55a667d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
