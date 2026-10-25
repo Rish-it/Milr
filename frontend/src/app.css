@@ -176,7 +176,8 @@ body {
   opacity: 0.6;
 }
 
-/* Heatmap: warm where wind came in below forecast, cool where above, mixed toward the high end as the gap grows. */
+/* Heatmap: each cell takes a Sea shade for the size of its gap (--cell, set per cell). Filled where wind came in below
+   forecast, outlined where it came in above. */
 .heat {
   position: relative;
   display: grid;
@@ -195,15 +196,12 @@ body {
 }
 .heat-cell,
 .heat-key {
-  --low: var(--heat-low);
-  --high: var(--heat-high);
-  --cell: color-mix(in oklch, var(--high) var(--p), var(--low));
-}
-.heat-cell,
-.heat-key {
+  --shown: var(--cell);
   border-radius: 2px;
-  background: var(--cell);
-  transition: background-color var(--duration-fast, 125ms) ease-out;
+  background: var(--shown);
+  transition-property: background-color, box-shadow;
+  transition-duration: var(--duration-fast, 125ms);
+  transition-timing-function: ease-out;
 }
 .heat-key {
   width: 14px;
@@ -211,12 +209,12 @@ body {
 }
 .heat-cell.above,
 .heat-key.above {
-  --low: var(--cool-low);
-  --high: var(--cool-high);
+  background: none;
+  box-shadow: inset 0 0 0 2px var(--shown);
 }
 /* While one cell is read, everything outside its day and hour steps back toward the card. */
 .heat[data-active] .heat-cell:not(.lit) {
-  background: color-mix(in oklab, var(--cell) 30%, var(--color-background-card));
+  --shown: color-mix(in oklab, var(--cell) 30%, var(--color-background-card));
 }
 .heat-y,
 .heat-x {

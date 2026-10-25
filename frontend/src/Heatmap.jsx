@@ -7,11 +7,12 @@ import { Text } from '@astryxdesign/core/Text'
 import { VStack } from '@astryxdesign/core/VStack'
 import { useApi } from './api'
 import { gapText, mw } from './format'
+import { shade } from './theme'
 
 const dayName = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short' })
 const HOURS = Array.from({ length: 24 }, (_, h) => h)
 const pad = (h) => `${String(h).padStart(2, '0')}:00`
-const KEYS = ['0%', '50%', '100%']
+const KEYS = [0, 0.25, 0.5, 0.75, 1]
 
 export function Heatmap({ days, selectedDay, onSelectDay }) {
   const { data, error } = useApi('/api/hours')
@@ -49,25 +50,27 @@ export function Heatmap({ days, selectedDay, onSelectDay }) {
       <VStack gap={1}>
         <Heading level={2}>Every hour of the month</Heading>
         <Text color="secondary">
-          One cell per delivery hour: warm where wind came in below forecast, cool where it came in above, stronger
-          for a bigger gap. Lower rows were forecast further ahead: 14.5 h for 00:00, 37.5 h for 23:00. Pick a cell
-          to open its day.
+          One cell per delivery hour, stronger for a bigger gap between forecast and actual: filled where wind came in
+          below forecast, outlined where it came in above. Lower rows were forecast further ahead: 14.5 h for 00:00,
+          37.5 h for 23:00. Pick a cell to open its day.
         </Text>
       </VStack>
       <HStack gap={4} wrap="wrap" vAlign="center">
         <HStack gap={1} vAlign="center">
-          {KEYS.map((p) => (
-            <span key={p} className="heat-key" style={{ '--p': p }} />
+          <Text>No gap</Text>
+          {KEYS.map((share) => (
+            <span key={share} className="heat-key" style={{ '--cell': shade(share) }} />
           ))}
+          <Text>{mw(worst)}</Text>
+        </HStack>
+        <HStack gap={1} vAlign="center">
+          <span className="heat-key" style={{ '--cell': shade(0.75) }} />
           <Text>Wind below forecast</Text>
         </HStack>
         <HStack gap={1} vAlign="center">
-          {KEYS.map((p) => (
-            <span key={p} className="heat-key above" style={{ '--p': p }} />
-          ))}
+          <span className="heat-key above" style={{ '--cell': shade(0.75) }} />
           <Text>Wind above forecast</Text>
         </HStack>
-        <Text color="secondary">Strongest shade: a gap of {mw(worst)}</Text>
       </HStack>
       <div
         className="heat"
@@ -96,7 +99,7 @@ export function Heatmap({ days, selectedDay, onSelectDay }) {
                 data-d={d}
                 data-h={h}
                 className={`heat-cell${row?.error > 0 ? ' above' : ''}${lit ? ' lit' : ''}`}
-                style={{ '--p': `${row ? Math.round((Math.abs(row.error) / worst) * 100) : 0}%` }}
+                style={{ '--cell': shade(row ? Math.abs(row.error) / worst : 0) }}
               />
             )
           }),

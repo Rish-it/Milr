@@ -46,12 +46,6 @@ export const milrTheme = defineTheme({
     '--chart-forecast': ['#595959', '#a6a6a6'],
     '--chart-plan': ['#858585', '#808080'],
     '--chart-grid': ['#ececec', '#262626'],
-    // Forecast error: warm where wind came in below forecast, cool where above. Cells mix from low (no gap)
-    // toward high (the largest gap), so the strongest shade stands out most against the card in both modes.
-    '--heat-low': ['#fbecd0', '#3d1a14'],
-    '--heat-high': ['#b3261e', '#ffcf70'],
-    '--cool-low': ['#dfeaf7', '#14253a'],
-    '--cool-high': ['#1f5fa8', '#8ec5ff'],
     // Daily plan bars, from the Sea ramp: the plan strong, the safety margin lighter, each at least 3:1 on the card.
     '--sea-plan': tone(0.88),
     '--sea-margin': tone(0.52),
