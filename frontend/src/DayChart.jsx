@@ -7,9 +7,8 @@ import { Skeleton } from '@astryxdesign/core/Skeleton'
 import { Text } from '@astryxdesign/core/Text'
 import { VStack } from '@astryxdesign/core/VStack'
 import { useApi } from './api'
+import { mw } from './format'
 
-const whole = new Intl.NumberFormat('en-GB')
-const mw = (value) => `${whole.format(Math.abs(value))} MW`
 const UK = 'Europe/London'
 const clock = new Intl.DateTimeFormat('en-GB', { timeZone: UK, hour: '2-digit', minute: '2-digit' })
 const published = new Intl.DateTimeFormat('en-GB', {
