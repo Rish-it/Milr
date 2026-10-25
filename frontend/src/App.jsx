@@ -41,15 +41,12 @@ export default function App() {
               </Text>
             </VStack>
             <HStack gap={4} wrap="wrap" vAlign="end">
-              {/* The calendar picks the month it opens on when it mounts, so it mounts again once the days arrive. */}
               <DateInput
-                key={days ? 'ready' : 'loading'}
                 label="Delivery day"
                 value={day}
                 onChange={(value) => value && openDay(value)}
                 min={days?.[0]}
                 max={days?.at(-1)}
-                isLoading={!days}
                 format="date_weekday"
                 weekStartsOn="mon"
               />
