@@ -1,0 +1,21 @@
+.gitignore
+  s_1bb59782262abf::t_fce65e35fa9705 1-3
+backend/requirements.txt
+  s_1bb59782262abf::t_fce65e35fa9705 1-2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "83dfc3a74730edf0fadc9b4be4642332d2063368",
+  "prompts": {},
+  "sessions": {
+    "s_1bb59782262abf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b4b0aa3c-bddb-416b-88af-bc3bab38c2fa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
