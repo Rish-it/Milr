@@ -1,0 +1,25 @@
+frontend/src/app.css
+  s_01a117c046b873::t_2048230c99830f 290
+  s_01a117c046b873::t_ed7c0d3ee92adb 185-186,190-192,202-203,239-240,247,278-280,282-289,291-300,303-308,311-312,321-323
+frontend/src/PlanBars.jsx
+  s_01a117c046b873::t_2048230c99830f 120-121
+  s_01a117c046b873::t_94f64adbde473f 57-59,64-65,68-69,72-73,75,85
+  s_01a117c046b873::t_87e484ce175ff5 26-33,106-113,115-119,122-124
+  s_01a117c046b873::t_9b908df94ff38c 93
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "16f00a0c4406422370e149eadd457aef1328b51b",
+  "prompts": {},
+  "sessions": {
+    "s_01a117c046b873": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e2e841a1-1d5a-493f-b76c-67c6e55a667d",
+        "model": "unknown"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
