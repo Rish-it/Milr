@@ -1,0 +1,22 @@
+frontend/src/app.css
+  s_01a117c046b873::t_4e92ac9d50dfae 204-261,263-292
+  s_01a117c046b873::t_82ebbac6401f56 262
+frontend/src/PlanBars.jsx
+  s_01a117c046b873::t_7a3381859028d2 1-151
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9887f29e08c5820a0fc1cada9da91030a78196f9",
+  "prompts": {},
+  "sessions": {
+    "s_01a117c046b873": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e2e841a1-1d5a-493f-b76c-67c6e55a667d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
