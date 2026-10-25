@@ -141,3 +141,63 @@ body {
 .kpi-frame[aria-busy] {
   opacity: 0.6;
 }
+
+/* Heatmap: zero is the grid tone, wind below forecast deepens toward the actual-line ink, above forecast is striped. */
+.heat {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.5rem repeat(var(--days), minmax(0, 1fr));
+  grid-auto-rows: 14px;
+  gap: 2px;
+  touch-action: pan-y;
+  cursor: pointer;
+}
+.heat:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+.heat-cell,
+.heat-key {
+  --cell: color-mix(in oklab, var(--chart-actual) var(--p), var(--chart-grid));
+  border-radius: 2px;
+  background: var(--cell);
+  transition: background-color var(--duration-fast, 125ms) ease-out;
+}
+.heat-key {
+  width: 14px;
+  height: 14px;
+}
+.heat-cell.above,
+.heat-key.above {
+  background: repeating-linear-gradient(135deg, var(--cell) 0 2px, var(--chart-grid) 2px 4px);
+}
+/* While one cell is read, everything outside its day and hour steps back toward the grid tone. */
+.heat[data-active] .heat-cell:not(.lit) {
+  --cell: color-mix(in oklab, var(--chart-actual) calc(var(--p) * 0.3), var(--chart-grid));
+}
+.heat-y,
+.heat-x {
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--color-text-secondary);
+  line-height: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.heat-x {
+  margin-top: 4px;
+  text-align: center;
+}
+.heat-x[data-picked] {
+  border-radius: 4px;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+.heat .chart-tip {
+  top: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .heat-cell {
+    transition: none;
+  }
+}
+
