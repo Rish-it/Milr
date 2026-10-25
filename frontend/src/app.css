@@ -2,3 +2,138 @@ body {
   background: var(--color-background-body);
   color: var(--color-text-primary);
 }
+
+/* Chart series: told apart by grey value, weight and dash, never by hue. */
+.series {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.series-actual {
+  stroke: var(--chart-actual);
+  stroke-width: 2.5;
+}
+.series-forecast {
+  stroke: var(--chart-forecast);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+}
+.series-plan {
+  stroke: var(--chart-plan);
+  stroke-width: 2;
+  stroke-dasharray: 0.5 5;
+}
+
+.chart-frame[aria-busy] {
+  opacity: 0.6;
+}
+.chart {
+  position: relative;
+  height: 280px;
+  margin: 8px 0 28px 48px;
+  touch-action: pan-y;
+  font-variant-numeric: tabular-nums;
+}
+.chart:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+.chart > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.chart-grid {
+  stroke: var(--chart-grid);
+  vector-effect: non-scaling-stroke;
+}
+.chart-gap {
+  fill: var(--chart-grid);
+}
+.chart-y,
+.chart-x {
+  position: absolute;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+.chart-y {
+  right: calc(100% + 8px);
+  transform: translateY(-50%);
+}
+.chart-x {
+  top: calc(100% + 8px);
+  transform: translateX(-50%);
+}
+.chart-band,
+.chart-dot,
+.chart-tip {
+  position: absolute;
+  pointer-events: none;
+  transition-property: left, top;
+  transition-duration: var(--duration-fast, 125ms);
+  transition-timing-function: ease-out;
+}
+.chart-band {
+  top: 0;
+  bottom: 0;
+  transform: translateX(-50%);
+  background: var(--color-overlay-hover);
+}
+.chart-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 2px var(--color-background-card);
+}
+.dot-actual {
+  background: var(--chart-actual);
+}
+.dot-forecast {
+  background: var(--chart-forecast);
+}
+.dot-plan {
+  background: var(--chart-plan);
+}
+.chart-tip {
+  top: 0;
+  z-index: 1;
+  display: grid;
+  gap: 4px;
+  min-width: 15rem;
+  padding: 10px 12px;
+  border-radius: var(--radius-element, 10px);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: var(--font-size-sm);
+  transform: translateX(16px);
+}
+.chart-tip[hidden] {
+  display: none;
+}
+.chart-tip[data-flip] {
+  transform: translateX(calc(-100% - 16px));
+}
+.chart-tip-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.chart-tip .series {
+  stroke: currentColor;
+}
+.chart-tip-note {
+  opacity: 0.8;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chart-band,
+  .chart-dot,
+  .chart-tip {
+    transition: none;
+  }
+}
