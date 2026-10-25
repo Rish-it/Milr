@@ -8,6 +8,7 @@ import { Slider } from '@astryxdesign/core/Slider'
 import { Text } from '@astryxdesign/core/Text'
 import { VStack } from '@astryxdesign/core/VStack'
 import { useApi } from './api'
+import { DayChart } from './DayChart'
 
 export default function App() {
   const summary = useApi('/api/summary')
@@ -53,9 +54,7 @@ export default function App() {
       {summary.error ? (
         <EmptyState title="Could not load the January data" description={summary.error} />
       ) : summary.data ? (
-        <Text color="secondary">
-          Planning {day} at {Math.round(confidence * 100)}% confidence
-        </Text>
+        <DayChart day={day} confidence={confidence} />
       ) : (
         <Skeleton height={48} />
       )}
