@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { Card } from '@astryxdesign/core/Card'
 import { DateInput } from '@astryxdesign/core/DateInput'
 import { EmptyState } from '@astryxdesign/core/EmptyState'
@@ -82,13 +82,19 @@ export default function App() {
                 <Kpis accuracy={summary.data.accuracy} bands={summary.data.by_wind_band} confidence={confidence} />
               </div>
               <div className="fill" hidden={view !== 'day'}>
-                <DayChart day={day} confidence={confidence} />
+                <Suspense fallback={<Skeleton height={380} />}>
+                  <DayChart day={day} confidence={confidence} />
+                </Suspense>
               </div>
               <div className="fill" hidden={view !== 'plan'}>
-                <PlanBars confidence={confidence} selectedDay={day} onSelectDay={openDay} />
+                <Suspense fallback={<Skeleton height={400} />}>
+                  <PlanBars confidence={confidence} selectedDay={day} onSelectDay={openDay} />
+                </Suspense>
               </div>
               <div className="fill" hidden={view !== 'hours'}>
-                <Heatmap days={days} selectedDay={day} onSelectDay={openDay} />
+                <Suspense fallback={<Skeleton height={460} />}>
+                  <Heatmap days={days} selectedDay={day} onSelectDay={openDay} />
+                </Suspense>
               </div>
             </>
           ) : (

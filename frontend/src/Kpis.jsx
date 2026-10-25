@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Card } from '@astryxdesign/core/Card'
 import { Grid } from '@astryxdesign/core/Grid'
 import { Heading } from '@astryxdesign/core/Heading'
@@ -64,7 +65,9 @@ export function Kpis({ accuracy, bands, confidence }) {
         <Kpi label="Miss, weighting big ones (RMSE)" value={mw(accuracy.rmse)}>
           Like the typical miss, but large misses count extra. Well above it means some hours missed badly.
         </Kpi>
-        <Coverage confidence={confidence} />
+        <Suspense fallback={<Skeleton height={160} />}>
+          <Coverage confidence={confidence} />
+        </Suspense>
       </Grid>
     </VStack>
   )
