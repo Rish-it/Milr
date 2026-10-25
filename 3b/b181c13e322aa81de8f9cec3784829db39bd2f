@@ -1,0 +1,21 @@
+backend/api.py
+  s_1bb59782262abf::t_15602d15ee4f4a 1-35
+backend/test_api.py
+  s_1bb59782262abf::t_63c5dec4b14425 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3bb181c13e322aa81de8f9cec3784829db39bd2f",
+  "prompts": {},
+  "sessions": {
+    "s_1bb59782262abf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b4b0aa3c-bddb-416b-88af-bc3bab38c2fa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
