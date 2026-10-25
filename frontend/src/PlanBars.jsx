@@ -20,7 +20,7 @@ function planText(day) {
 export function PlanBars({ confidence, selectedDay, onSelectDay }) {
   const { data, error, loading } = useApi(`/api/days?confidence=${confidence}`)
   const [active, setActive] = useState(null)
-  if (error) return <EmptyState title="Could not load the month's plans" description={error} />
+  if (error) return <EmptyState title="Could not load the month's plans" description={error} headingLevel={2} />
   if (!data) return <Skeleton height={400} />
 
   const last = data.length - 1

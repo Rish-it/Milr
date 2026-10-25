@@ -138,7 +138,7 @@ function Plot({ hours, label }) {
 
 export function DayChart({ day, confidence }) {
   const { data: hours, error, loading } = useApi(`/api/day/${day}?confidence=${confidence}`)
-  if (error) return <EmptyState title="Could not load this day" description={error} />
+  if (error) return <EmptyState title="Could not load this day" description={error} headingLevel={2} />
   if (!hours) return <Skeleton height={380} />
 
   const noPlan = hours.every((h) => h.plan == null)

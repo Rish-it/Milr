@@ -16,7 +16,7 @@ const pad = (h) => `${String(h).padStart(2, '0')}:00`
 export function Heatmap({ days, selectedDay, onSelectDay }) {
   const { data, error } = useApi('/api/hours')
   const [active, setActive] = useState(null)
-  if (error) return <EmptyState title="Could not load the month" description={error} />
+  if (error) return <EmptyState title="Could not load the month" description={error} headingLevel={2} />
   if (!data) return <Skeleton height={460} />
 
   const byCell = new Map(data.map((row) => [`${row.day} ${row.hour}`, row]))

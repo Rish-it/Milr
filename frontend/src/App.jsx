@@ -60,7 +60,7 @@ export default function App() {
         </HStack>
       </HStack>
       {summary.error ? (
-        <EmptyState title="Could not load the January data" description={summary.error} />
+        <EmptyState title="Could not load the January data" description={summary.error} headingLevel={2} />
       ) : summary.data ? (
         <>
           <Kpis accuracy={summary.data.accuracy} confidence={confidence} />
