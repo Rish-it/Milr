@@ -1,0 +1,21 @@
+backend/index.py
+  s_1bb59782262abf::t_15e652f77dec14 1-2
+backend/vercel.json
+  s_1bb59782262abf::t_15e652f77dec14 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "57b9a0291e889b12982fffea65caedb01989fd0e",
+  "prompts": {},
+  "sessions": {
+    "s_1bb59782262abf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b4b0aa3c-bddb-416b-88af-bc3bab38c2fa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
