@@ -1,0 +1,24 @@
+frontend/src/Kpis.jsx
+  s_01a117c046b873::t_9275159f44a2a9 31-34,43
+  s_01a117c046b873::t_c398e3be630a07 1-30,35-42,44-57
+frontend/src/app.css
+  s_01a117c046b873::t_c398e3be630a07 140-143
+frontend/src/format.js
+  s_01a117c046b873::t_c398e3be630a07 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a77eb2b4494760901ac0d8f505996f6f698d1ef0",
+  "prompts": {},
+  "sessions": {
+    "s_01a117c046b873": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e2e841a1-1d5a-493f-b76c-67c6e55a667d",
+        "model": "unknown"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
