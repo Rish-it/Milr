@@ -37,16 +37,20 @@ function Coverage({ confidence }) {
   )
 }
 
-export function Kpis({ accuracy, confidence }) {
+const way = (bias) => (bias < 0 ? 'below' : 'above')
+
+export function Kpis({ accuracy, bands, confidence }) {
   const high = accuracy.bias < 0
+  const [calm, windy] = [bands[0], bands.at(-1)]
   return (
     <Grid columns={{ minWidth: 240, repeat: 'fit' }} gap={4}>
       <Kpi label="Typical miss" value={mw(accuracy.mae)}>
         Average gap between forecast and actual, in either direction, over {accuracy.hours} hours.
       </Kpi>
       <Kpi label={high ? 'Forecast ran high by' : 'Forecast ran low by'} value={mw(accuracy.bias)}>
-        On average wind came in this far {high ? 'below' : 'above'} forecast. The gap grows on windy days;
-        curtailment is the likely cause.
+        On average wind came in this far {way(accuracy.bias)} forecast. The gap grows with wind: {mw(calm.bias)}{' '}
+        {way(calm.bias)} when the forecast was {calm.band}, {mw(windy.bias)} at {windy.band}. Curtailment is the likely
+        cause.
       </Kpi>
       <Kpi label="Miss, weighting big ones (RMSE)" value={mw(accuracy.rmse)}>
         Like the typical miss, but large misses count extra. Well above it means some hours missed badly.

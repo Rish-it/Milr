@@ -63,7 +63,7 @@ export default function App() {
         <EmptyState title="Could not load the January data" description={summary.error} headingLevel={2} />
       ) : summary.data ? (
         <>
-          <Kpis accuracy={summary.data.accuracy} confidence={confidence} />
+          <Kpis accuracy={summary.data.accuracy} bands={summary.data.by_wind_band} confidence={confidence} />
           <div ref={chart}>
             <DayChart day={day} confidence={confidence} />
           </div>
