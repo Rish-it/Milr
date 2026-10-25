@@ -1,11 +1,12 @@
 import { use, useDeferredValue } from 'react'
 
-const UNREACHABLE = 'Cannot reach the server. Is the backend running?'
+// Failed requests stay cached (see request), so a reload is how a reader retries.
+const UNREACHABLE = 'The server is not responding. Reload the page to try again.'
 
-// FastAPI errors: 404 carries a sentence, 422 a list of field problems.
-// 502-504 come from a proxy in front of a backend that is down.
+// FastAPI errors: 404 carries a sentence, 422 a list of field problems. 5xx means the server or a proxy in front
+// of it failed, which a reload may fix.
 export function errorMessage(status, body) {
-  if (status >= 502 && status <= 504) return UNREACHABLE
+  if (status >= 500) return UNREACHABLE
   const detail = body?.detail
   if (typeof detail === 'string') return detail
   if (Array.isArray(detail) && detail[0]?.msg) return detail[0].msg

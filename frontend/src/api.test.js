@@ -7,8 +7,9 @@ test('error messages come from the FastAPI detail, whatever its shape', () => {
   assert.equal(errorMessage(404, notFound), notFound.detail)
   const invalid = { detail: [{ loc: ['query', 'confidence'], msg: 'Input should be less than or equal to 0.99' }] }
   assert.equal(errorMessage(422, invalid), 'Input should be less than or equal to 0.99')
-  assert.equal(errorMessage(500, null), 'The server answered 500.')
-  assert.match(errorMessage(502, null), /Cannot reach the server/)
+  assert.equal(errorMessage(418, null), 'The server answered 418.')
+  assert.match(errorMessage(500, null), /Reload the page/)
+  assert.match(errorMessage(502, null), /Reload the page/)
 })
 
 test('a path is fetched once and settles to its data or a readable error', async () => {
@@ -22,6 +23,6 @@ test('a path is fetched once and settles to its data or a readable error', async
   assert.equal(request('/ok'), request('/ok'))
   assert.deepEqual(await request('/ok'), { data: [1, 2] })
   assert.deepEqual(await request('/missing'), { error: 'No data' })
-  assert.match((await request('/down')).error, /Cannot reach the server/)
+  assert.match((await request('/down')).error, /Reload the page/)
   assert.deepEqual(calls, ['/ok', '/missing', '/down'])
 })
