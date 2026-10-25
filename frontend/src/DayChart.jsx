@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Card } from '@astryxdesign/core/Card'
 import { EmptyState } from '@astryxdesign/core/EmptyState'
 import { Heading } from '@astryxdesign/core/Heading'
 import { HStack } from '@astryxdesign/core/HStack'
@@ -143,35 +142,33 @@ export function DayChart({ day, confidence }) {
 
   const noPlan = hours.every((h) => h.plan == null)
   return (
-    <Card>
-      <VStack gap={4}>
-        <VStack gap={1}>
-          <Heading level={2}>Forecast vs actual</Heading>
-          <Text color="secondary">
-            Forecast published {published.format(new Date(hours[0].publishTime))} UK, the newest before the 11:00
-            deadline the day before. The plan is the forecast less a safety margin learned from past errors.
-          </Text>
-        </VStack>
-        <HStack gap={4} wrap="wrap">
-          {SERIES.map(({ key, label }) => (
-            <HStack key={key} gap={1} vAlign="center">
-              <Swatch series={key} />
-              <Text>
-                {label}
-                {key === 'plan' && ` (${Math.round(confidence * 100)}% confidence)`}
-              </Text>
-            </HStack>
-          ))}
-        </HStack>
-        {noPlan && (
-          <Text color="secondary">
-            No plan for this day: the first week has too little history to learn a safety margin.
-          </Text>
-        )}
-        <div aria-busy={loading || undefined} className="chart-frame">
-          <Plot hours={hours} label={`Hourly wind generation for ${day}: forecast, actual and plan`} />
-        </div>
+    <VStack gap={4} className="fill">
+      <VStack gap={1}>
+        <Heading level={2}>Forecast vs actual</Heading>
+        <Text color="secondary">
+          Forecast published {published.format(new Date(hours[0].publishTime))} UK, the newest before the 11:00
+          deadline the day before. The plan is the forecast less a safety margin learned from past errors.
+        </Text>
       </VStack>
-    </Card>
+      <HStack gap={4} wrap="wrap">
+        {SERIES.map(({ key, label }) => (
+          <HStack key={key} gap={1} vAlign="center">
+            <Swatch series={key} />
+            <Text>
+              {label}
+              {key === 'plan' && ` (${Math.round(confidence * 100)}% confidence)`}
+            </Text>
+          </HStack>
+        ))}
+      </HStack>
+      {noPlan && (
+        <Text color="secondary">
+          No plan for this day: the first week has too little history to learn a safety margin.
+        </Text>
+      )}
+      <div aria-busy={loading || undefined} className="chart-frame fill">
+        <Plot hours={hours} label={`Hourly wind generation for ${day}: forecast, actual and plan`} />
+      </div>
+    </VStack>
   )
 }

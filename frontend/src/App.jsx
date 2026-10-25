@@ -1,8 +1,10 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
+import { Card } from '@astryxdesign/core/Card'
 import { DateInput } from '@astryxdesign/core/DateInput'
 import { EmptyState } from '@astryxdesign/core/EmptyState'
 import { Heading } from '@astryxdesign/core/Heading'
 import { HStack } from '@astryxdesign/core/HStack'
+import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl'
 import { Skeleton } from '@astryxdesign/core/Skeleton'
 import { Slider } from '@astryxdesign/core/Slider'
 import { Text } from '@astryxdesign/core/Text'
@@ -18,17 +20,17 @@ export default function App() {
   const days = summary.data?.days
   const [pickedDay, setPickedDay] = useState()
   const day = pickedDay ?? days?.at(-1)
-  const chart = useRef(null)
+  const [view, setView] = useState('day')
   const openDay = (value) => {
     setPickedDay(value)
-    chart.current?.scrollIntoView()
+    setView('day')
   }
   // The thumb follows the drag; the API is only asked once the drag ends.
   const [percent, setPercent] = useState(90)
   const [confidence, setConfidence] = useState(0.9)
 
   return (
-    <VStack gap={6} padding={4}>
+    <VStack gap={4} padding={4} className="app">
       <HStack gap={6} wrap="wrap" hAlign="between" vAlign="end">
         <VStack gap={1}>
           <Heading level={1}>Day-ahead wind</Heading>
@@ -38,7 +40,7 @@ export default function App() {
           <DateInput
             label="Delivery day"
             value={day}
-            onChange={(value) => value && setPickedDay(value)}
+            onChange={(value) => value && openDay(value)}
             min={days?.[0]}
             max={days?.at(-1)}
             isLoading={!days}
@@ -64,11 +66,25 @@ export default function App() {
       ) : summary.data ? (
         <>
           <Kpis accuracy={summary.data.accuracy} bands={summary.data.by_wind_band} confidence={confidence} />
-          <div ref={chart}>
-            <DayChart day={day} confidence={confidence} />
-          </div>
-          <PlanBars confidence={confidence} selectedDay={day} onSelectDay={openDay} />
-          <Heatmap days={days} selectedDay={day} onSelectDay={openDay} />
+          {/* All three views stay mounted, so switching back shows them at once instead of refetching. */}
+          <Card className="stage">
+            <VStack gap={4} className="fill">
+              <SegmentedControl label="View" value={view} onChange={setView}>
+                <SegmentedControlItem value="day" label="Day" />
+                <SegmentedControlItem value="plan" label="Plan by day" />
+                <SegmentedControlItem value="hours" label="Every hour" />
+              </SegmentedControl>
+              <div className="fill" hidden={view !== 'day'}>
+                <DayChart day={day} confidence={confidence} />
+              </div>
+              <div className="fill" hidden={view !== 'plan'}>
+                <PlanBars confidence={confidence} selectedDay={day} onSelectDay={openDay} />
+              </div>
+              <div className="fill" hidden={view !== 'hours'}>
+                <Heatmap days={days} selectedDay={day} onSelectDay={openDay} />
+              </div>
+            </VStack>
+          </Card>
         </>
       ) : (
         <Skeleton height={48} />

@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Card } from '@astryxdesign/core/Card'
 import { EmptyState } from '@astryxdesign/core/EmptyState'
 import { Heading } from '@astryxdesign/core/Heading'
 import { HStack } from '@astryxdesign/core/HStack'
@@ -46,111 +45,109 @@ export function PlanBars({ confidence, selectedDay, onSelectDay }) {
   }
 
   return (
-    <Card>
-      <VStack gap={4}>
-        <VStack gap={1}>
-          <Heading level={2}>The plan, day by day</Heading>
-          <Text color="secondary">
-            Each bar is a delivery day&apos;s average forecast, split into what the plan counted on and the safety margin
-            it held back at {percent(confidence)} confidence. The mark is where wind actually averaged. Averages hide
-            single hours: open a day to see them.
-          </Text>
-        </VStack>
-        <HStack gap={4} wrap="wrap" vAlign="center">
-          <HStack gap={1} vAlign="center">
-            <span className="bar-key planned" />
-            <Text>Plan</Text>
-          </HStack>
-          <HStack gap={1} vAlign="center">
-            <span className="bar-key margin" />
-            <Text>Safety margin</Text>
-          </HStack>
-          <HStack gap={1} vAlign="center">
-            <span className="bar-key unplanned" />
-            <Text>Forecast, no plan yet (first week)</Text>
-          </HStack>
-          <HStack gap={1} vAlign="center">
-            <span className="bar-key actual" />
-            <Text>Actual</Text>
-          </HStack>
+    <VStack gap={4} className="fill">
+      <VStack gap={1}>
+        <Heading level={2}>The plan, day by day</Heading>
+        <Text color="secondary">
+          Each bar is a delivery day&apos;s average forecast, split into what the plan counted on and the safety margin
+          it held back at {percent(confidence)} confidence. The mark is where wind actually averaged. Averages hide
+          single hours: open a day to see them.
+        </Text>
+      </VStack>
+      <HStack gap={4} wrap="wrap" vAlign="center">
+        <HStack gap={1} vAlign="center">
+          <span className="bar-key planned" />
+          <Text>Plan</Text>
         </HStack>
-        <div className="bars-frame" aria-busy={loading || undefined}>
-          <div
-            className="bars"
-            style={{ '--bars': data.length }}
-            data-active={day ? '' : undefined}
-            tabIndex={0}
-            role="group"
-            aria-roledescription="bar chart"
-            aria-label="Daily average forecast split into plan and safety margin, with the actual average. Arrow keys move between days, Enter opens the day."
-            onPointerMove={pick}
-            onPointerLeave={() => setActive(null)}
-            onClick={() => day && onSelectDay(day.day)}
-            onKeyDown={step}
-            onBlur={() => setActive(null)}
-          >
-            {ticks.map((t) => (
-              <span key={t} className="chart-y" style={{ top: `${100 - (t / top) * 100}%` }} aria-hidden="true">
-                {t / 1000} GW
-              </span>
-            ))}
-            {data.map((d, i) => (
-              <div
-                key={d.day}
-                className="bar"
-                data-i={i}
-                data-lit={active === i || undefined}
-                style={{ '--i': i }}
-                aria-hidden="true"
-              >
-                {d.plan == null ? (
-                  <span className="bar-seg unplanned" style={{ height: height(d.forecast) }} />
-                ) : (
-                  <>
-                    <span className="bar-seg planned" style={{ height: height(d.plan) }} />
-                    <span className="bar-seg margin" style={{ height: height(d.forecast - d.plan) }} />
-                  </>
-                )}
-                <span className="bar-actual" style={{ bottom: height(d.actual) }} />
-              </div>
-            ))}
+        <HStack gap={1} vAlign="center">
+          <span className="bar-key margin" />
+          <Text>Safety margin</Text>
+        </HStack>
+        <HStack gap={1} vAlign="center">
+          <span className="bar-key unplanned" />
+          <Text>Forecast, no plan yet (first week)</Text>
+        </HStack>
+        <HStack gap={1} vAlign="center">
+          <span className="bar-key actual" />
+          <Text>Actual</Text>
+        </HStack>
+      </HStack>
+      <div className="bars-frame" aria-busy={loading || undefined}>
+        <div
+          className="bars"
+          style={{ '--bars': data.length }}
+          data-active={day ? '' : undefined}
+          tabIndex={0}
+          role="group"
+          aria-roledescription="bar chart"
+          aria-label="Daily average forecast split into plan and safety margin, with the actual average. Arrow keys move between days, Enter opens the day."
+          onPointerMove={pick}
+          onPointerLeave={() => setActive(null)}
+          onClick={() => day && onSelectDay(day.day)}
+          onKeyDown={step}
+          onBlur={() => setActive(null)}
+        >
+          {ticks.map((t) => (
+            <span key={t} className="chart-y" style={{ top: `${100 - (t / top) * 100}%` }} aria-hidden="true">
+              {t / 1000} GW
+            </span>
+          ))}
+          {data.map((d, i) => (
             <div
-              className="chart-tip"
-              data-flip={active > last / 2 || undefined}
-              style={{ '--x': `${((active ?? 0) + 0.5) * (100 / data.length)}%` }}
-              hidden={!day}
-              aria-live="polite"
+              key={d.day}
+              className="bar"
+              data-i={i}
+              data-lit={active === i || undefined}
+              style={{ '--i': i }}
+              aria-hidden="true"
             >
-              {day && (
+              {d.plan == null ? (
+                <span className="bar-seg unplanned" style={{ height: height(d.forecast) }} />
+              ) : (
                 <>
-                  <strong>{dayName.format(new Date(day.day))} · daily average</strong>
-                  <span>Forecast {mw(day.forecast)}</span>
-                  {day.plan != null && (
-                    <span>
-                      Plan {mw(day.plan)}, holding back {mw(day.forecast - day.plan)}
-                    </span>
-                  )}
-                  <span>Actual {mw(day.actual)}</span>
-                  <span>{planText(day)}</span>
-                  <span className="chart-tip-note">Click or press Enter to open this day</span>
+                  <span className="bar-seg planned" style={{ height: height(d.plan) }} />
+                  <span className="bar-seg margin" style={{ height: height(d.forecast - d.plan) }} />
                 </>
               )}
+              <span className="bar-actual" style={{ bottom: height(d.actual) }} />
             </div>
-          </div>
-          <div className="bars-x" style={{ '--bars': data.length }} aria-hidden="true">
-            {data.map((d, i) => (
-              <span
-                key={d.day}
-                className="heat-x"
-                data-picked={d.day === selectedDay || undefined}
-                data-minor={i % 2 || undefined}
-              >
-                {Number(d.day.slice(8))}
-              </span>
-            ))}
+          ))}
+          <div
+            className="chart-tip"
+            data-flip={active > last / 2 || undefined}
+            style={{ '--x': `${((active ?? 0) + 0.5) * (100 / data.length)}%` }}
+            hidden={!day}
+            aria-live="polite"
+          >
+            {day && (
+              <>
+                <strong>{dayName.format(new Date(day.day))} · daily average</strong>
+                <span>Forecast {mw(day.forecast)}</span>
+                {day.plan != null && (
+                  <span>
+                    Plan {mw(day.plan)}, holding back {mw(day.forecast - day.plan)}
+                  </span>
+                )}
+                <span>Actual {mw(day.actual)}</span>
+                <span>{planText(day)}</span>
+                <span className="chart-tip-note">Click or press Enter to open this day</span>
+              </>
+            )}
           </div>
         </div>
-      </VStack>
-    </Card>
+        <div className="bars-x" style={{ '--bars': data.length }} aria-hidden="true">
+          {data.map((d, i) => (
+            <span
+              key={d.day}
+              className="heat-x"
+              data-picked={d.day === selectedDay || undefined}
+              data-minor={i % 2 || undefined}
+            >
+              {Number(d.day.slice(8))}
+            </span>
+          ))}
+        </div>
+      </div>
+    </VStack>
   )
 }

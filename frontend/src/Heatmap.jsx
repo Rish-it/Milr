@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Card } from '@astryxdesign/core/Card'
 import { EmptyState } from '@astryxdesign/core/EmptyState'
 import { Heading } from '@astryxdesign/core/Heading'
 import { HStack } from '@astryxdesign/core/HStack'
@@ -45,96 +44,95 @@ export function Heatmap({ days, selectedDay, onSelectDay }) {
   }
 
   return (
-    <Card>
-      <VStack gap={4}>
-        <VStack gap={1}>
-          <Heading level={2}>Every hour of the month</Heading>
-          <Text color="secondary">
-            One cell per delivery hour. The stronger the shade, the further wind came in below forecast; striped cells
-            came in above it. Lower rows were forecast further ahead: 14.5 h for 00:00, 37.5 h for 23:00. Pick a day
-            to open it above.
-          </Text>
-        </VStack>
-        <HStack gap={4} wrap="wrap" vAlign="center">
-          <HStack gap={1} vAlign="center">
-            <span className="heat-key" style={{ '--p': '0%' }} />
-            <span className="heat-key" style={{ '--p': '50%' }} />
-            <span className="heat-key" style={{ '--p': '100%' }} />
-            <Text>Below forecast, up to {mw(worst)}</Text>
-          </HStack>
-          <HStack gap={1} vAlign="center">
-            <span className="heat-key above" style={{ '--p': '60%' }} />
-            <Text>Above forecast</Text>
-          </HStack>
-        </HStack>
-        <div
-          className="heat"
-          style={{ '--days': days.length }}
-          data-active={active ? '' : undefined}
-          tabIndex={0}
-          role="group"
-          aria-roledescription="heatmap"
-          aria-label="Forecast error for every delivery hour of the month. Arrow keys move between cells, Enter opens the day."
-          onPointerMove={pick}
-          onPointerLeave={() => setActive(null)}
-          onClick={() => active && onSelectDay(days[active.d])}
-          onKeyDown={step}
-          onBlur={() => setActive(null)}
-        >
-          {HOURS.map((h) => [
-            <span key={`y${h}`} className="heat-y" aria-hidden="true">
-              {h % 6 ? '' : pad(h)}
-            </span>,
-            ...days.map((day, d) => {
-              const row = byCell.get(`${day} ${h}`)
-              const lit = active && (active.d === d || active.h === h)
-              return (
-                <span
-                  key={`${day} ${h}`}
-                  data-d={d}
-                  data-h={h}
-                  className={`heat-cell${row?.error > 0 ? ' above' : ''}${lit ? ' lit' : ''}`}
-                  style={{ '--p': `${row ? Math.round((Math.abs(row.error) / worst) * 100) : 0}%` }}
-                />
-              )
-            }),
-          ])}
-          <span />
-          {days.map((day, d) => (
-            <span
-              key={day}
-              className="heat-x"
-              data-picked={day === selectedDay || undefined}
-              data-minor={d % 2 || undefined}
-              aria-hidden="true"
-            >
-              {Number(day.slice(8))}
-            </span>
-          ))}
-          <div
-            className="chart-tip"
-            data-flip={active?.d > last / 2 || undefined}
-            style={{
-              '--x': `calc(2.5rem + (100% - 2.5rem) * ${((active?.d ?? 0) + 0.5) / days.length})`,
-              '--y': `${((active?.h ?? 0) + 1) * 16}px`,
-            }}
-            hidden={!cell}
-            aria-live="polite"
-          >
-            {cell && (
-              <>
-                <strong>
-                  {dayName.format(new Date(cell.day))}, {pad(cell.hour)}
-                </strong>
-                <span>Forecast {mw(cell.forecast)}</span>
-                <span>Actual {mw(cell.actual)}</span>
-                <span>{gapText(cell.error)}</span>
-                <span className="chart-tip-note">Click or press Enter to open this day</span>
-              </>
-            )}
-          </div>
-        </div>
+    <VStack gap={4} className="fill">
+      <VStack gap={1}>
+        <Heading level={2}>Every hour of the month</Heading>
+        <Text color="secondary">
+          One cell per delivery hour. The stronger the shade, the further wind came in below forecast; striped cells
+          came in above it. Lower rows were forecast further ahead: 14.5 h for 00:00, 37.5 h for 23:00. Pick a day
+          to open it above.
+        </Text>
       </VStack>
-    </Card>
+      <HStack gap={4} wrap="wrap" vAlign="center">
+        <HStack gap={1} vAlign="center">
+          <span className="heat-key" style={{ '--p': '0%' }} />
+          <span className="heat-key" style={{ '--p': '50%' }} />
+          <span className="heat-key" style={{ '--p': '100%' }} />
+          <Text>Below forecast, up to {mw(worst)}</Text>
+        </HStack>
+        <HStack gap={1} vAlign="center">
+          <span className="heat-key above" style={{ '--p': '60%' }} />
+          <Text>Above forecast</Text>
+        </HStack>
+      </HStack>
+      <div
+        className="heat"
+        style={{ '--days': days.length }}
+        data-active={active ? '' : undefined}
+        tabIndex={0}
+        role="group"
+        aria-roledescription="heatmap"
+        aria-label="Forecast error for every delivery hour of the month. Arrow keys move between cells, Enter opens the day."
+        onPointerMove={pick}
+        onPointerLeave={() => setActive(null)}
+        onClick={() => active && onSelectDay(days[active.d])}
+        onKeyDown={step}
+        onBlur={() => setActive(null)}
+      >
+        {HOURS.map((h) => [
+          <span key={`y${h}`} className="heat-y" aria-hidden="true">
+            {h % 6 ? '' : pad(h)}
+          </span>,
+          ...days.map((day, d) => {
+            const row = byCell.get(`${day} ${h}`)
+            const lit = active && (active.d === d || active.h === h)
+            return (
+              <span
+                key={`${day} ${h}`}
+                data-d={d}
+                data-h={h}
+                className={`heat-cell${row?.error > 0 ? ' above' : ''}${lit ? ' lit' : ''}`}
+                style={{ '--p': `${row ? Math.round((Math.abs(row.error) / worst) * 100) : 0}%` }}
+              />
+            )
+          }),
+        ])}
+        <span />
+        {days.map((day, d) => (
+          <span
+            key={day}
+            className="heat-x"
+            data-picked={day === selectedDay || undefined}
+            data-minor={d % 2 || undefined}
+            aria-hidden="true"
+          >
+            {Number(day.slice(8))}
+          </span>
+        ))}
+        <div
+          className="chart-tip"
+          data-flip={active?.d > last / 2 || undefined}
+          data-up={active?.h > 11 || undefined}
+          style={{
+            '--x': `calc(2.5rem + (100% - 2.5rem) * ${((active?.d ?? 0) + 0.5) / days.length})`,
+            '--y': `calc((100% - 18px) * ${((active?.h ?? 0) + 0.5) / 24})`,
+          }}
+          hidden={!cell}
+          aria-live="polite"
+        >
+          {cell && (
+            <>
+              <strong>
+                {dayName.format(new Date(cell.day))}, {pad(cell.hour)}
+              </strong>
+              <span>Forecast {mw(cell.forecast)}</span>
+              <span>Actual {mw(cell.actual)}</span>
+              <span>{gapText(cell.error)}</span>
+              <span className="chart-tip-note">Click or press Enter to open this day</span>
+            </>
+          )}
+        </div>
+      </div>
+    </VStack>
   )
 }
