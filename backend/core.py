@@ -7,7 +7,9 @@ import pandas as pd
 
 DATA = Path(__file__).parent / "data"
 UK = "Europe/London"
-BANDS = [0, 8000, 12000, 16000, float("inf")]  # forecast MW; the error grows with wind
+# Forecast MW; the error grows with wind. Edges were chosen after viewing all of January, so the
+# backtest is not fully out of sample. Fit them on a training window once more months are in scope.
+BANDS = [0, 8000, 12000, 16000, float("inf")]
 BAND_LABELS = ["<8 GW", "8-12 GW", "12-16 GW", "16+ GW"]
 MIN_HISTORY_DAYS = 7
 
