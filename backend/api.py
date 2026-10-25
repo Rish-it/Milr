@@ -30,6 +30,12 @@ def day(day: str, confidence: float = Confidence):
     return json.loads(hours[columns].to_json(orient="records", date_format="iso"))
 
 
+@app.get("/api/hours")
+def hours():
+    columns = ["day", "hour", "forecast", "actual", "error"]
+    return json.loads(COMPARED[columns].to_json(orient="records"))
+
+
 @app.get("/api/backtest")
 def backtest(confidence: float = Confidence):
     return core.backtest(COMPARED, confidence)
