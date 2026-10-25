@@ -36,6 +36,13 @@ def hours():
     return json.loads(COMPARED[columns].to_json(orient="records"))
 
 
+@app.get("/api/days")
+def days(confidence: float = Confidence):
+    planned = core.plan_month(COMPARED, confidence).astype({"plan": float})
+    daily = planned.groupby("day")[["forecast", "plan", "actual"]].mean().round()
+    return json.loads(daily.reset_index().to_json(orient="records"))
+
+
 @app.get("/api/backtest")
 def backtest(confidence: float = Confidence):
     return core.backtest(COMPARED, confidence)
