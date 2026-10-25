@@ -1,0 +1,20 @@
+backend/requirements.txt
+  s_1bb59782262abf::t_63c5dec4b14425 5
+  s_1bb59782262abf::t_a2df89c33a1740 2-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "97c77e516ef916f4bbaa99ab76f100d112142136",
+  "prompts": {},
+  "sessions": {
+    "s_1bb59782262abf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b4b0aa3c-bddb-416b-88af-bc3bab38c2fa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
