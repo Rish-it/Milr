@@ -9,8 +9,10 @@ export const milrTheme = defineTheme({
   tokens: {
     '--color-background-body': ['#f1f1f1', '#111111'],
     '--color-background-card': ['#ffffff', '#1c1c1c'],
-    '--color-background-surface': ['#ffffff', '#1c1c1c'],
+    // Fields and tiles sit on the card, so they take a raised tone; the neutral dark muted tone matched the card.
+    '--color-background-surface': ['#f4f4f4', '#242424'],
     '--color-background-popover': ['#ffffff', '#262626'],
+    '--color-background-muted': ['#f4f4f4', '#242424'],
     '--color-text-secondary': ['#525252', '#a3a3a3'],
     '--color-border': ['transparent', 'transparent'],
     '--color-border-emphasized': ['transparent', 'transparent'],

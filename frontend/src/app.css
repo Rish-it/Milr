@@ -3,15 +3,19 @@ body {
   color: var(--color-text-primary);
 }
 
-/* One view at a time fills the panel under the KPIs, so a desktop screen never scrolls. Phones and short windows
-   fall back to the page's natural height. */
+/* One centred container holds the controls and one view at a time. It takes the height of the view it shows, and
+   charts give up height before a desktop screen would scroll. Phones and short windows keep the page's natural
+   height. */
 .app {
-  height: 100dvh;
+  width: 100%;
+  max-width: 1280px;
+  max-height: 100dvh;
+  margin-inline: auto;
 }
 .stage,
 .fill {
   display: flex;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   flex-direction: column;
   min-height: 0;
 }
@@ -20,7 +24,7 @@ body {
 }
 @media (max-width: 640px), (max-height: 640px) {
   .app {
-    height: auto;
+    max-height: none;
   }
 }
 
@@ -51,7 +55,7 @@ body {
 }
 .chart {
   position: relative;
-  flex: 1 1 auto;
+  flex: 0 1 420px;
   min-height: 220px;
   margin: 8px 0 28px 48px;
   touch-action: pan-y;
@@ -161,6 +165,9 @@ body {
   }
 }
 
+.kpi-frame {
+  display: grid;
+}
 .kpi-frame[aria-busy] {
   opacity: 0.6;
 }
@@ -169,7 +176,8 @@ body {
 .heat {
   position: relative;
   display: grid;
-  flex: 1 1 auto;
+  flex: 0 1 480px;
+  min-height: 300px;
   grid-template-columns: 2.5rem repeat(var(--days), minmax(0, 1fr));
   grid-template-rows: repeat(24, minmax(10px, 1fr)) auto;
   gap: 2px;
@@ -240,8 +248,9 @@ body {
    with the plan as a tick. Candles not being read step back toward the card, never by opacity. */
 .bars-frame {
   display: flex;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   flex-direction: column;
+  min-height: 0;
   margin: 8px 0 0 48px;
 }
 .bars-frame[aria-busy] .bar {
@@ -251,7 +260,7 @@ body {
   position: relative;
   display: grid;
   grid-template-columns: repeat(var(--bars), minmax(0, 1fr));
-  flex: 1 1 auto;
+  flex: 0 1 400px;
   gap: 4px;
   min-height: 220px;
   touch-action: pan-y;

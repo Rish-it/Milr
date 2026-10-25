@@ -1,5 +1,6 @@
 import { Card } from '@astryxdesign/core/Card'
 import { Grid } from '@astryxdesign/core/Grid'
+import { Heading } from '@astryxdesign/core/Heading'
 import { Skeleton } from '@astryxdesign/core/Skeleton'
 import { Text } from '@astryxdesign/core/Text'
 import { VStack } from '@astryxdesign/core/VStack'
@@ -8,12 +9,12 @@ import { mw, percent } from './format'
 
 function Kpi({ label, value, children }) {
   return (
-    <Card>
-      <VStack gap={1}>
+    <Card variant="muted">
+      <VStack gap={2}>
         <Text type="label" color="secondary">
           {label}
         </Text>
-        <Text type="display-3">{value}</Text>
+        <Text type="display-2">{value}</Text>
         <Text type="supporting">{children}</Text>
       </VStack>
     </Card>
@@ -43,19 +44,28 @@ export function Kpis({ accuracy, bands, confidence }) {
   const high = accuracy.bias < 0
   const [calm, windy] = [bands[0], bands.at(-1)]
   return (
-    <Grid columns={{ minWidth: 240, repeat: 'fit' }} gap={4}>
-      <Kpi label="Typical miss" value={mw(accuracy.mae)}>
-        Average gap between forecast and actual, in either direction, over {accuracy.hours} hours.
-      </Kpi>
-      <Kpi label={high ? 'Forecast ran high by' : 'Forecast ran low by'} value={mw(accuracy.bias)}>
-        On average wind came in this far {way(accuracy.bias)} forecast. The gap grows with wind: {mw(calm.bias)}{' '}
-        {way(calm.bias)} when the forecast was {calm.band}, {mw(windy.bias)} at {windy.band}. Curtailment is the likely
-        cause.
-      </Kpi>
-      <Kpi label="Miss, weighting big ones (RMSE)" value={mw(accuracy.rmse)}>
-        Like the typical miss, but large misses count extra. Well above it means some hours missed badly.
-      </Kpi>
-      <Coverage confidence={confidence} />
-    </Grid>
+    <VStack gap={4} className="fill">
+      <VStack gap={1}>
+        <Heading level={2}>January at a glance</Heading>
+        <Text color="secondary">
+          {accuracy.hours} delivery hours, each scored against the newest forecast published before 11:00 UK the day
+          before.
+        </Text>
+      </VStack>
+      <Grid columns={{ minWidth: 220, repeat: 'fit' }} gap={4}>
+        <Kpi label="Typical miss" value={mw(accuracy.mae)}>
+          Average gap between forecast and actual, in either direction, over {accuracy.hours} hours.
+        </Kpi>
+        <Kpi label={high ? 'Forecast ran high by' : 'Forecast ran low by'} value={mw(accuracy.bias)}>
+          On average wind came in this far {way(accuracy.bias)} forecast. The gap grows with wind: {mw(calm.bias)}{' '}
+          {way(calm.bias)} when the forecast was {calm.band}, {mw(windy.bias)} at {windy.band}. Curtailment is the likely
+          cause.
+        </Kpi>
+        <Kpi label="Miss, weighting big ones (RMSE)" value={mw(accuracy.rmse)}>
+          Like the typical miss, but large misses count extra. Well above it means some hours missed badly.
+        </Kpi>
+        <Coverage confidence={confidence} />
+      </Grid>
+    </VStack>
   )
 }
