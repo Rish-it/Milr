@@ -1,7 +1,9 @@
 """HTTP API over core: what the buyer saw for each delivery day, and how far to trust it."""
 import json
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.staticfiles import StaticFiles
 
 import core
 
@@ -30,6 +32,25 @@ def day(day: str, confidence: float = Confidence):
     return json.loads(hours[columns].to_json(orient="records", date_format="iso"))
 
 
+@app.get("/api/hours")
+def hours():
+    columns = ["day", "hour", "forecast", "actual", "error"]
+    return json.loads(COMPARED[columns].to_json(orient="records"))
+
+
+@app.get("/api/days")
+def days(confidence: float = Confidence):
+    planned = core.plan_month(COMPARED, confidence).astype({"plan": float})
+    daily = planned.groupby("day")[["forecast", "plan", "actual"]].mean().round()
+    return json.loads(daily.reset_index().to_json(orient="records"))
+
+
 @app.get("/api/backtest")
 def backtest(confidence: float = Confidence):
     return core.backtest(COMPARED, confidence)
+
+
+# The built React app, when present (the container copies it here). Mounted last so /api routes match first.
+UI = Path(__file__).parent / "static"
+if UI.is_dir():
+    app.mount("/", StaticFiles(directory=UI, html=True), name="ui")

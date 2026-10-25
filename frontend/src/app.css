@@ -1,0 +1,371 @@
+body {
+  background: var(--color-background-body);
+  color: var(--color-text-primary);
+}
+
+/* One centred container holds the controls and one view at a time. It takes the height of the view it shows, and
+   charts give up height before a desktop screen would scroll. Phones and short windows keep the page's natural
+   height. */
+.app {
+  width: 100%;
+  max-width: 1280px;
+  max-height: 100dvh;
+  margin-inline: auto;
+}
+.stage,
+.fill {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+.fill[hidden] {
+  display: none;
+}
+@media (max-width: 640px), (max-height: 640px) {
+  .app {
+    max-height: none;
+  }
+}
+/* DateInput opens its calendar flush against the field; leave a gap. */
+.astryx-date-input [popover] {
+  margin-block-start: 8px;
+}
+
+/* Chart series: told apart by grey value, weight and dash, never by hue. */
+.series {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.series-actual {
+  stroke: var(--chart-actual);
+  stroke-width: 2.5;
+}
+.series-forecast {
+  stroke: var(--chart-forecast);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+}
+.series-plan {
+  stroke: var(--chart-plan);
+  stroke-width: 2;
+  stroke-dasharray: 0.5 5;
+}
+
+.chart-frame[aria-busy] {
+  opacity: 0.6;
+}
+.chart {
+  position: relative;
+  flex: 0 1 420px;
+  min-height: 220px;
+  margin: 8px 0 28px 48px;
+  touch-action: pan-y;
+  font-variant-numeric: tabular-nums;
+}
+.chart:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+.chart > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.chart-grid {
+  stroke: var(--chart-grid);
+  vector-effect: non-scaling-stroke;
+}
+.chart-gap {
+  fill: var(--chart-grid);
+}
+.chart-y,
+.chart-x {
+  position: absolute;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+.chart-y {
+  right: calc(100% + 8px);
+  transform: translateY(-50%);
+}
+.chart-x {
+  top: calc(100% + 8px);
+  transform: translateX(-50%);
+}
+.chart-band,
+.chart-dot,
+.chart-tip {
+  position: absolute;
+  pointer-events: none;
+  transition-property: left, top;
+  transition-duration: var(--duration-fast, 125ms);
+  transition-timing-function: ease-out;
+}
+.chart-band {
+  top: 0;
+  bottom: 0;
+  transform: translateX(-50%);
+  background: var(--color-overlay-hover);
+}
+.chart-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 2px var(--color-background-card);
+}
+.dot-actual {
+  background: var(--chart-actual);
+}
+.dot-forecast {
+  background: var(--chart-forecast);
+}
+.dot-plan {
+  background: var(--chart-plan);
+}
+.chart-tip {
+  top: 0;
+  left: var(--x);
+  z-index: 1;
+  display: grid;
+  gap: 4px;
+  min-width: 15rem;
+  padding: 10px 12px;
+  border-radius: var(--radius-element, 10px);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: var(--font-size-sm);
+  transform: translateX(16px);
+}
+.chart-tip[hidden] {
+  display: none;
+}
+.chart-tip[data-flip] {
+  transform: translateX(calc(-100% - 16px));
+}
+.chart-tip-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.chart-tip .series {
+  stroke: currentColor;
+}
+.chart-tip-note {
+  opacity: 0.8;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chart-band,
+  .chart-dot,
+  .chart-tip {
+    transition: none;
+  }
+}
+
+.kpi-frame {
+  display: grid;
+}
+.kpi-frame[aria-busy] {
+  opacity: 0.6;
+}
+
+/* Heatmap: each cell takes a Sea shade for the size of its gap (--cell, set per cell). Filled where wind came in below
+   forecast, outlined where it came in above. */
+.heat {
+  position: relative;
+  display: grid;
+  flex: 0 1 480px;
+  min-height: 300px;
+  grid-template-columns: 2.5rem repeat(var(--days), minmax(0, 1fr));
+  grid-template-rows: repeat(24, minmax(10px, 1fr)) auto;
+  gap: 2px;
+  touch-action: pan-y;
+  cursor: pointer;
+}
+.heat:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+.heat-cell,
+.heat-key {
+  --shown: var(--cell);
+  border-radius: 2px;
+  background: var(--shown);
+  transition-property: background-color, box-shadow;
+  transition-duration: var(--duration-fast, 125ms);
+  transition-timing-function: ease-out;
+}
+.heat-key {
+  width: 14px;
+  height: 14px;
+}
+.heat-cell.above,
+.heat-key.above {
+  background: none;
+  box-shadow: inset 0 0 0 2px var(--shown);
+}
+/* While one cell is read, everything outside its day and hour steps back toward the card. */
+.heat[data-active] .heat-cell:not(.lit) {
+  --shown: color-mix(in oklab, var(--cell) 30%, var(--color-background-card));
+}
+.heat-y,
+.heat-x {
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--color-text-secondary);
+  line-height: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.heat-x {
+  margin-top: 4px;
+  text-align: center;
+}
+.heat-x[data-picked] {
+  border-radius: 4px;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+.heat .chart-tip {
+  top: var(--y);
+}
+.heat .chart-tip[data-up] {
+  translate: 0 -100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .heat-cell {
+    transition: none;
+  }
+}
+
+/* Daily plan bars: each segment is its own box; bars not being read step back toward the card, never by opacity. */
+.bars-frame {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  margin: 8px 0 0 48px;
+}
+.bars-frame[aria-busy] .bar-seg {
+  --strength: 60%;
+}
+.bars {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--bars), minmax(0, 1fr));
+  flex: 0 1 400px;
+  gap: 4px;
+  min-height: 220px;
+  touch-action: pan-y;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.bars:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+.bars-x {
+  display: grid;
+  grid-template-columns: repeat(var(--bars), minmax(0, 1fr));
+  gap: 4px;
+}
+.bar {
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
+  border-radius: 4px;
+}
+.bar[data-lit] {
+  background: var(--color-overlay-hover);
+}
+.bar-seg,
+.bar-key {
+  --seg: var(--sea-plan);
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--seg) var(--strength, 100%), var(--color-background-card));
+}
+.bar-seg {
+  transition: height 300ms ease-out calc(var(--i) * 12ms);
+}
+.bar-key {
+  width: 14px;
+  height: 14px;
+}
+.margin {
+  --seg: var(--sea-margin);
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--seg) var(--strength, 100%), var(--color-background-card)) 0 2px,
+    transparent 2px 5px
+  );
+}
+.unplanned {
+  --seg: color-mix(in oklab, var(--chart-forecast) 45%, var(--color-background-card));
+}
+.bar-actual,
+.bar-key.actual {
+  --seg: var(--chart-actual);
+}
+.bar-actual {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  height: 3px;
+  transform: translateY(50%);
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--seg) var(--strength, 100%), var(--color-background-card));
+  box-shadow: 0 0 0 2px var(--color-background-card);
+}
+.bar-key.actual {
+  height: 3px;
+}
+.bars[data-active] .bar:not([data-lit]) {
+  --strength: 35%;
+}
+.bars .chart-tip {
+  top: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar-seg {
+    transition: none;
+  }
+}
+
+/* Phones: the tooltip docks full width above the plot, where a finger on the plot doesn't cover it and the card doesn't
+   clip it; every other day label and the 3-hourly time labels rest. */
+@media (max-width: 640px) {
+  .chart-tip,
+  .chart-tip[data-flip],
+  .bars .chart-tip,
+  .heat .chart-tip,
+  .heat .chart-tip[data-up] {
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: calc(100% + 8px);
+    min-width: 0;
+    transform: none;
+    translate: none;
+  }
+  .bars,
+  .bars-x {
+    gap: 2px;
+  }
+  [data-minor]:not([data-picked]) {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
