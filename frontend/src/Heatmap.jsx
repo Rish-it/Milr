@@ -11,6 +11,7 @@ import { gapText, mw } from './format'
 const dayName = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short' })
 const HOURS = Array.from({ length: 24 }, (_, h) => h)
 const pad = (h) => `${String(h).padStart(2, '0')}:00`
+const KEYS = ['0%', '50%', '100%']
 
 export function Heatmap({ days, selectedDay, onSelectDay }) {
   const { data, error } = useApi('/api/hours')
@@ -48,22 +49,25 @@ export function Heatmap({ days, selectedDay, onSelectDay }) {
       <VStack gap={1}>
         <Heading level={2}>Every hour of the month</Heading>
         <Text color="secondary">
-          One cell per delivery hour. The stronger the shade, the further wind came in below forecast; striped cells
-          came in above it. Lower rows were forecast further ahead: 14.5 h for 00:00, 37.5 h for 23:00. Pick a day
-          to open it above.
+          One cell per delivery hour: warm where wind came in below forecast, cool where it came in above, stronger
+          for a bigger gap. Lower rows were forecast further ahead: 14.5 h for 00:00, 37.5 h for 23:00. Pick a cell
+          to open its day.
         </Text>
       </VStack>
       <HStack gap={4} wrap="wrap" vAlign="center">
         <HStack gap={1} vAlign="center">
-          <span className="heat-key" style={{ '--p': '0%' }} />
-          <span className="heat-key" style={{ '--p': '50%' }} />
-          <span className="heat-key" style={{ '--p': '100%' }} />
-          <Text>Below forecast, up to {mw(worst)}</Text>
+          {KEYS.map((p) => (
+            <span key={p} className="heat-key" style={{ '--p': p }} />
+          ))}
+          <Text>Wind below forecast</Text>
         </HStack>
         <HStack gap={1} vAlign="center">
-          <span className="heat-key above" style={{ '--p': '60%' }} />
-          <Text>Above forecast</Text>
+          {KEYS.map((p) => (
+            <span key={p} className="heat-key above" style={{ '--p': p }} />
+          ))}
+          <Text>Wind above forecast</Text>
         </HStack>
+        <Text color="secondary">Strongest shade: a gap of {mw(worst)}</Text>
       </HStack>
       <div
         className="heat"

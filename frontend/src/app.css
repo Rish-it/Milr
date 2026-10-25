@@ -165,7 +165,7 @@ body {
   opacity: 0.6;
 }
 
-/* Heatmap: zero is the grid tone, wind below forecast deepens toward the actual-line ink, above forecast is striped. */
+/* Heatmap: warm where wind came in below forecast, cool where above, mixed toward the high end as the gap grows. */
 .heat {
   position: relative;
   display: grid;
@@ -183,7 +183,9 @@ body {
 }
 .heat-cell,
 .heat-key {
-  --cell: color-mix(in oklab, var(--chart-actual) var(--p), var(--chart-grid));
+  --low: var(--heat-low);
+  --high: var(--heat-high);
+  --cell: color-mix(in oklch, var(--high) var(--p), var(--low));
   border-radius: 2px;
   background: var(--cell);
   transition: background-color var(--duration-fast, 125ms) ease-out;
@@ -194,11 +196,12 @@ body {
 }
 .heat-cell.above,
 .heat-key.above {
-  background: repeating-linear-gradient(135deg, var(--cell) 0 2px, var(--chart-grid) 2px 4px);
+  --low: var(--cool-low);
+  --high: var(--cool-high);
 }
-/* While one cell is read, everything outside its day and hour steps back toward the grid tone. */
+/* While one cell is read, everything outside its day and hour steps back toward the card. */
 .heat[data-active] .heat-cell:not(.lit) {
-  --cell: color-mix(in oklab, var(--chart-actual) calc(var(--p) * 0.3), var(--chart-grid));
+  background: color-mix(in oklab, var(--cell) 30%, var(--color-background-card));
 }
 .heat-y,
 .heat-x {
