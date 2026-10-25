@@ -1,6 +1,6 @@
 import pandas as pd
 
-from core import latest_forecast, plan
+from core import backtest, latest_forecast, plan
 
 
 def forecasts_for(target, *published):
@@ -23,13 +23,27 @@ def test_cutoff_follows_uk_clock_in_summer():
     assert latest_forecast(f).publishTime.tolist() == [pd.Timestamp("2026-07-10T09:30Z")]
 
 
+def one_hour_per_day(errors, forecast=10_000):
+    return pd.DataFrame({
+        "day": [f"2026-01-{d:02}" for d in range(1, len(errors) + 1)],
+        "band": "16+ GW",
+        "forecast": forecast,
+        "actual": [forecast + e for e in errors],
+        "error": errors,
+    })
+
+
 def test_plan_margin_ignores_days_not_finished_by_decision_time():
     # Decision for 10 Jan is made at 11:00 on 9 Jan, so 9 and 10 Jan outcomes are unknown.
-    days = [f"2026-01-{d:02}" for d in range(1, 11)]
-    compared = pd.DataFrame({
-        "day": days,
-        "band": "16+ GW",
-        "forecast": 10_000,
-        "error": [-100] * 8 + [-9_999, -9_999],
-    })
+    compared = one_hour_per_day([-100] * 8 + [-9_999, -9_999])
     assert plan(compared, "2026-01-10", confidence=0.9).plan.tolist() == [9_900]
+
+
+def test_backtest_scores_only_days_with_enough_history():
+    # Wind always lands 100 MW under forecast; only 9 and 10 Jan have 7 finished days behind them.
+    assert backtest(one_hour_per_day([-100] * 10), confidence=0.9) == {
+        "hours": 2,
+        "avg_margin_mw": 100,
+        "forecast": {"covered": 0.0, "avg_shortfall_mw": 100},
+        "plan": {"covered": 1.0, "avg_shortfall_mw": 0},
+    }
