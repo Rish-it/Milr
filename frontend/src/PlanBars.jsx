@@ -23,9 +23,14 @@ export function PlanBars({ confidence, selectedDay, onSelectDay }) {
   if (!data) return <Skeleton height={400} />
 
   const last = data.length - 1
-  const top = Math.ceil(Math.max(...data.flatMap((d) => [d.forecast, d.actual])) / 5000) * 5000
-  const height = (value) => `${(Math.max(0, value) / top) * 100}%`
-  const ticks = Array.from({ length: top / 5000 + 1 }, (_, i) => i * 5000)
+  // Candles float, so the axis spans only the GW the month used, rounded out to 5 GW.
+  const values = data.flatMap((d) => [d.forecast, d.actual, d.plan ?? d.actual])
+  const bottom = Math.floor(Math.min(...values) / 5000) * 5000
+  const top = Math.ceil(Math.max(...values) / 5000) * 5000
+  const at = (value) => `${((value - bottom) / (top - bottom)) * 100}%`
+  const span = (a, b) => `${(Math.abs(a - b) / (top - bottom)) * 100}%`
+  const ticks = Array.from({ length: (top - bottom) / 5000 + 1 }, (_, i) => bottom + i * 5000)
+  const worst = Math.max(...data.map((d) => Math.abs(d.actual - d.forecast)))
   const day = active === null ? null : data[active]
 
   const pick = (event) => {
@@ -49,28 +54,25 @@ export function PlanBars({ confidence, selectedDay, onSelectDay }) {
       <VStack gap={1}>
         <Heading level={2}>The plan, day by day</Heading>
         <Text color="secondary">
-          Each bar is a delivery day&apos;s average forecast, split into what the plan counted on and the safety margin
-          it held back at {percent(confidence)} confidence. The mark is where wind actually averaged. Averages hide
-          single hours: open a day to see them.
+          Each candle runs from a delivery day&apos;s average forecast to its average actual, shaded like the
+          heatmap. The tick is the plan at {percent(confidence)} confidence: below the candle, wind cleared it; inside,
+          wind came in below it. The first week has no plan yet. Averages hide single hours: open a day to see them.
         </Text>
       </VStack>
       <HStack gap={4} wrap="wrap" vAlign="center">
         <HStack gap={1} vAlign="center">
-          <span className="bar-key planned" />
+          <span className="heat-key" style={{ '--p': '70%' }} />
+          <Text>Wind below forecast</Text>
+        </HStack>
+        <HStack gap={1} vAlign="center">
+          <span className="heat-key above" style={{ '--p': '70%' }} />
+          <Text>Wind above forecast</Text>
+        </HStack>
+        <HStack gap={1} vAlign="center">
+          <span className="plan-key" />
           <Text>Plan</Text>
         </HStack>
-        <HStack gap={1} vAlign="center">
-          <span className="bar-key margin" />
-          <Text>Safety margin</Text>
-        </HStack>
-        <HStack gap={1} vAlign="center">
-          <span className="bar-key unplanned" />
-          <Text>Forecast, no plan yet (first week)</Text>
-        </HStack>
-        <HStack gap={1} vAlign="center">
-          <span className="bar-key actual" />
-          <Text>Actual</Text>
-        </HStack>
+        <Text color="secondary">Strongest shade: a gap of {mw(worst)}</Text>
       </HStack>
       <div className="bars-frame" aria-busy={loading || undefined}>
         <div
@@ -80,7 +82,7 @@ export function PlanBars({ confidence, selectedDay, onSelectDay }) {
           tabIndex={0}
           role="group"
           aria-roledescription="bar chart"
-          aria-label="Daily average forecast split into plan and safety margin, with the actual average. Arrow keys move between days, Enter opens the day."
+          aria-label="Daily average forecast to actual as candles, with the plan as a tick. Arrow keys move between days, Enter opens the day."
           onPointerMove={pick}
           onPointerLeave={() => setActive(null)}
           onClick={() => day && onSelectDay(day.day)}
@@ -88,7 +90,7 @@ export function PlanBars({ confidence, selectedDay, onSelectDay }) {
           onBlur={() => setActive(null)}
         >
           {ticks.map((t) => (
-            <span key={t} className="chart-y" style={{ top: `${100 - (t / top) * 100}%` }} aria-hidden="true">
+            <span key={t} className="chart-y" style={{ top: `calc(100% - ${at(t)})` }} aria-hidden="true">
               {t / 1000} GW
             </span>
           ))}
@@ -101,15 +103,25 @@ export function PlanBars({ confidence, selectedDay, onSelectDay }) {
               style={{ '--i': i }}
               aria-hidden="true"
             >
-              {d.plan == null ? (
-                <span className="bar-seg unplanned" style={{ height: height(d.forecast) }} />
-              ) : (
-                <>
-                  <span className="bar-seg planned" style={{ height: height(d.plan) }} />
-                  <span className="bar-seg margin" style={{ height: height(d.forecast - d.plan) }} />
-                </>
+              {d.plan != null && (
+                <span
+                  className="candle-wick"
+                  style={{
+                    bottom: at(Math.min(d.plan, d.actual, d.forecast)),
+                    height: span(Math.min(d.plan, d.actual, d.forecast), Math.max(d.plan, d.actual, d.forecast)),
+                  }}
+                />
               )}
-              <span className="bar-actual" style={{ bottom: height(d.actual) }} />
+              <span
+                className={`candle${d.actual > d.forecast ? ' above' : ''}`}
+                style={{
+                  bottom: at(Math.min(d.forecast, d.actual)),
+                  height: span(d.forecast, d.actual),
+                  // Starts at 30% so a day that matched its forecast still shows against the card.
+                  '--p': `${30 + Math.round((Math.abs(d.actual - d.forecast) / worst) * 70)}%`,
+                }}
+              />
+              {d.plan != null && <span className="candle-plan" style={{ bottom: at(d.plan) }} />}
             </div>
           ))}
           <div
