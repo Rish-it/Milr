@@ -1,0 +1,25 @@
+frontend/src/api.test.js
+  s_01a117c046b873::t_6feb85b2ca7d6f 3,13-26
+  s_01a117c046b873::t_12f7ba1b18a73e 27
+frontend/src/api.js
+  s_01a117c046b873::t_49862d62a44162 47-51
+  s_01a117c046b873::t_a1d30ceab23b3b 15-17,26-42
+frontend/src/App.jsx
+  s_01a117c046b873::t_6feb85b2ca7d6f 80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c8995ddc4057c76567566369a1cbfde72b481e84",
+  "prompts": {},
+  "sessions": {
+    "s_01a117c046b873": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e2e841a1-1d5a-493f-b76c-67c6e55a667d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
