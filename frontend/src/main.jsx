@@ -8,6 +8,7 @@ import '@astryxdesign/core/reset.css'
 import '@astryxdesign/core/astryx.css'
 import '@astryxdesign/theme-neutral/fonts.css'
 import { milrTheme } from './theme'
+import './app.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
