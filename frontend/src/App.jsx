@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { DateInput } from '@astryxdesign/core/DateInput'
 import { EmptyState } from '@astryxdesign/core/EmptyState'
 import { Heading } from '@astryxdesign/core/Heading'
@@ -9,6 +9,7 @@ import { Text } from '@astryxdesign/core/Text'
 import { VStack } from '@astryxdesign/core/VStack'
 import { useApi } from './api'
 import { DayChart } from './DayChart'
+import { Heatmap } from './Heatmap'
 import { Kpis } from './Kpis'
 
 export default function App() {
@@ -16,6 +17,11 @@ export default function App() {
   const days = summary.data?.days
   const [pickedDay, setPickedDay] = useState()
   const day = pickedDay ?? days?.at(-1)
+  const chart = useRef(null)
+  const openDay = (value) => {
+    setPickedDay(value)
+    chart.current?.scrollIntoView()
+  }
   // The thumb follows the drag; the API is only asked once the drag ends.
   const [percent, setPercent] = useState(90)
   const [confidence, setConfidence] = useState(0.9)
@@ -57,7 +63,10 @@ export default function App() {
       ) : summary.data ? (
         <>
           <Kpis accuracy={summary.data.accuracy} confidence={confidence} />
-          <DayChart day={day} confidence={confidence} />
+          <div ref={chart}>
+            <DayChart day={day} confidence={confidence} />
+          </div>
+          <Heatmap days={days} selectedDay={day} onSelectDay={openDay} />
         </>
       ) : (
         <Skeleton height={48} />
