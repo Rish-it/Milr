@@ -1,0 +1,22 @@
+Dockerfile
+  s_1bb59782262abf::t_53e5b829d73dea 1-8
+  s_1bb59782262abf::t_288a1fb80bd319 9
+.dockerignore
+  s_1bb59782262abf::t_53e5b829d73dea 1-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5ec9ff61a5295e0a1e7b17fea0549b372d0c89eb",
+  "prompts": {},
+  "sessions": {
+    "s_1bb59782262abf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b4b0aa3c-bddb-416b-88af-bc3bab38c2fa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
