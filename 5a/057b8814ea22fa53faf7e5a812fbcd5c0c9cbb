@@ -1,0 +1,27 @@
+frontend/src/app.css
+  s_01a117c046b873::t_fcab2f1d3f8082 105,197,296-297,301-302,305-306
+  s_01a117c046b873::t_7da2b4766d7046 294-295,298-300,303-304
+  s_01a117c046b873::t_0be113257440e6 307-309
+frontend/src/DayChart.jsx
+  s_01a117c046b873::t_c30dc3fd791d80 108
+frontend/src/Heatmap.jsx
+  s_01a117c046b873::t_4430103941b84d 112-113
+frontend/src/PlanBars.jsx
+  s_01a117c046b873::t_c5620e7c2d4d08 120
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5a057b8814ea22fa53faf7e5a812fbcd5c0c9cbb",
+  "prompts": {},
+  "sessions": {
+    "s_01a117c046b873": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e2e841a1-1d5a-493f-b76c-67c6e55a667d",
+        "model": "unknown"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
