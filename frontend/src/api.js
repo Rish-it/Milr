@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { use, useDeferredValue } from 'react'
 
 const UNREACHABLE = 'Cannot reach the server. Is the backend running?'
 
@@ -40,15 +40,9 @@ export function request(path) {
   return requests.get(path)
 }
 
-// GET a JSON endpoint. While a new path loads, the last data stays available so views don't flash empty.
+// GET a JSON endpoint, suspending on the first load. While a new path loads, the last data stays on screen with
+// loading set, instead of falling back to the skeleton.
 export function useApi(path) {
-  const [result, setResult] = useState({})
-  useEffect(() => {
-    let current = true
-    request(path).then((settled) => current && setResult({ path, ...settled }))
-    return () => {
-      current = false
-    }
-  }, [path])
-  return result.path === path ? result : { data: result.data, loading: true }
+  const shown = useDeferredValue(path)
+  return { ...use(request(shown)), loading: shown !== path }
 }

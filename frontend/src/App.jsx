@@ -69,7 +69,7 @@ export default function App() {
           </HStack>
           {summary.error ? (
             <EmptyState title="Could not load the January data" description={summary.error} headingLevel={2} />
-          ) : summary.data ? (
+          ) : (
             <>
               <SegmentedControl label="View" value={view} onChange={setView}>
                 <SegmentedControlItem value="overview" label="Overview" />
@@ -97,8 +97,6 @@ export default function App() {
                 </Suspense>
               </div>
             </>
-          ) : (
-            <Skeleton height={48} />
           )}
         </VStack>
       </Card>

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { EmptyState } from '@astryxdesign/core/EmptyState'
 import { Heading } from '@astryxdesign/core/Heading'
 import { HStack } from '@astryxdesign/core/HStack'
-import { Skeleton } from '@astryxdesign/core/Skeleton'
 import { Text } from '@astryxdesign/core/Text'
 import { VStack } from '@astryxdesign/core/VStack'
 import { useApi } from './api'
@@ -138,7 +137,6 @@ function Plot({ hours, label }) {
 export function DayChart({ day, confidence }) {
   const { data: hours, error, loading } = useApi(`/api/day/${day}?confidence=${confidence}`)
   if (error) return <EmptyState title="Could not load this day" description={error} headingLevel={2} />
-  if (!hours) return <Skeleton height={380} />
 
   const noPlan = hours.every((h) => h.plan == null)
   return (

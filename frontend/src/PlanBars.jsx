@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { EmptyState } from '@astryxdesign/core/EmptyState'
 import { Heading } from '@astryxdesign/core/Heading'
 import { HStack } from '@astryxdesign/core/HStack'
-import { Skeleton } from '@astryxdesign/core/Skeleton'
 import { Text } from '@astryxdesign/core/Text'
 import { VStack } from '@astryxdesign/core/VStack'
 import { useApi } from './api'
@@ -20,7 +19,6 @@ export function PlanBars({ confidence, selectedDay, onSelectDay }) {
   const { data, error, loading } = useApi(`/api/days?confidence=${confidence}`)
   const [active, setActive] = useState(null)
   if (error) return <EmptyState title="Could not load the month's plans" description={error} headingLevel={2} />
-  if (!data) return <Skeleton height={400} />
 
   const last = data.length - 1
   const top = Math.ceil(Math.max(...data.flatMap((d) => [d.forecast, d.actual])) / 5000) * 5000

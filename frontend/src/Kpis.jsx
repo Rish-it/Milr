@@ -26,7 +26,6 @@ function Coverage({ confidence }) {
   const { data, error, loading } = useApi(`/api/backtest?confidence=${confidence}`)
   const label = `Hours covered by the ${percent(confidence)} plan`
   if (error) return <Kpi label={label} value="–">{error}</Kpi>
-  if (!data) return <Skeleton height={160} />
   return (
     <div aria-busy={loading || undefined} className="kpi-frame">
       <Kpi label={label} value={percent(data.plan.covered)}>

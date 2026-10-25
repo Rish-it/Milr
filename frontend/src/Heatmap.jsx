@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { EmptyState } from '@astryxdesign/core/EmptyState'
 import { Heading } from '@astryxdesign/core/Heading'
 import { HStack } from '@astryxdesign/core/HStack'
-import { Skeleton } from '@astryxdesign/core/Skeleton'
 import { Text } from '@astryxdesign/core/Text'
 import { VStack } from '@astryxdesign/core/VStack'
 import { useApi } from './api'
@@ -18,7 +17,6 @@ export function Heatmap({ days, selectedDay, onSelectDay }) {
   const { data, error } = useApi('/api/hours')
   const [active, setActive] = useState(null)
   if (error) return <EmptyState title="Could not load the month" description={error} headingLevel={2} />
-  if (!data) return <Skeleton height={460} />
 
   const byCell = new Map(data.map((row) => [`${row.day} ${row.hour}`, row]))
   const worst = Math.max(...data.map((row) => Math.abs(row.error)))
