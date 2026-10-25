@@ -12,9 +12,9 @@ export function errorMessage(status, body) {
   return `The server answered ${status}.`
 }
 
-async function getJson(path, signal) {
-  const response = await fetch(path, { signal }).catch((error) => {
-    throw signal.aborted ? error : new Error(UNREACHABLE, { cause: error })
+async function getJson(path) {
+  const response = await fetch(path).catch((error) => {
+    throw new Error(UNREACHABLE, { cause: error })
   })
   if (!response.ok) {
     const body = await response.json().catch(() => null)
@@ -23,17 +23,32 @@ async function getJson(path, signal) {
   return response.json()
 }
 
+const requests = new Map()
+
+// One request per path, shared by every caller, settling to { data } or { error }. A failed request stays cached
+// too, so a reload is the retry.
+export function request(path) {
+  if (!requests.has(path)) {
+    requests.set(
+      path,
+      getJson(path).then(
+        (data) => ({ data }),
+        (error) => ({ error: error.message }),
+      ),
+    )
+  }
+  return requests.get(path)
+}
+
 // GET a JSON endpoint. While a new path loads, the last data stays available so views don't flash empty.
 export function useApi(path) {
   const [result, setResult] = useState({})
   useEffect(() => {
-    const controller = new AbortController()
-    getJson(path, controller.signal)
-      .then((data) => setResult({ path, data }))
-      .catch((error) => {
-        if (!controller.signal.aborted) setResult({ path, error: error.message })
-      })
-    return () => controller.abort()
+    let current = true
+    request(path).then((settled) => current && setResult({ path, ...settled }))
+    return () => {
+      current = false
+    }
   }, [path])
   return result.path === path ? result : { data: result.data, loading: true }
 }

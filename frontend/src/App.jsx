@@ -77,7 +77,7 @@ export default function App() {
                 <SegmentedControlItem value="plan" label="Daily plan" />
                 <SegmentedControlItem value="hours" label="Error heatmap" />
               </SegmentedControl>
-              {/* Every view stays mounted, so switching back shows it at once instead of refetching. */}
+              {/* Every view stays mounted, so switching back shows it at once with its state kept. */}
               <div className="fill" hidden={view !== 'overview'}>
                 <Kpis accuracy={summary.data.accuracy} bands={summary.data.by_wind_band} confidence={confidence} />
               </div>
