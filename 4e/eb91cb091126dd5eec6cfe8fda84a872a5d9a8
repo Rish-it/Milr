@@ -1,0 +1,21 @@
+frontend/index.html
+  s_1bb59782262abf::t_210a0eafef85d8 7
+frontend/public/favicon.svg
+  s_1bb59782262abf::t_210a0eafef85d8 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4eeb91cb091126dd5eec6cfe8fda84a872a5d9a8",
+  "prompts": {},
+  "sessions": {
+    "s_1bb59782262abf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b4b0aa3c-bddb-416b-88af-bc3bab38c2fa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
