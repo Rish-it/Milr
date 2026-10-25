@@ -19,8 +19,9 @@ export default function App() {
   const summary = useApi('/api/summary')
   const days = summary.data?.days
   const [pickedDay, setPickedDay] = useState()
-  const day = pickedDay ?? days?.at(-1)
-  const [view, setView] = useState('overview')
+  // The last delivery day in January: the brief's decision month, so the calendar opens on the data.
+  const day = pickedDay ?? days?.findLast((value) => value.startsWith(days[0].slice(0, 7)))
+  const [view, setView] = useState('day')
   const openDay = (value) => {
     setPickedDay(value)
     setView('day')
@@ -69,10 +70,10 @@ export default function App() {
           ) : (
             <>
               <SegmentedControl label="View" value={view} onChange={setView}>
-                <SegmentedControlItem value="overview" label="Overview" />
-                <SegmentedControlItem value="day" label="Delivery day" />
-                <SegmentedControlItem value="plan" label="Daily plan" />
-                <SegmentedControlItem value="hours" label="Error heatmap" />
+                <SegmentedControlItem value="day" label="Day" />
+                <SegmentedControlItem value="overview" label="Month" />
+                <SegmentedControlItem value="plan" label="Plan" />
+                <SegmentedControlItem value="hours" label="Hours" />
               </SegmentedControl>
               {/* Every view stays mounted, so switching back shows it at once with its state kept. */}
               <div className="fill" hidden={view !== 'overview'}>

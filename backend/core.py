@@ -3,6 +3,7 @@ import json
 from datetime import date, timedelta
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 DATA = Path(__file__).parent / "data"
@@ -59,7 +60,10 @@ def accuracy_by(compared, column):
 
 
 def plan(compared, day, confidence):
-    """The day's hours plus a `plan`: forecast adjusted by the error quantile of past hours in the same wind band.
+    """The day's hours plus a `plan`: forecast adjusted by the error quantile of past hours at a similar wind level.
+
+    Each wind band's quantile sits at the band's typical forecast, and the margin is interpolated between them,
+    so the plan moves smoothly instead of jumping when the forecast crosses a band edge.
 
     Only days fully delivered by the decision (11:00 the day before) count as history,
     so the margin never learns from the outcome it is planning for.
@@ -69,10 +73,10 @@ def plan(compared, day, confidence):
     if history.day.nunique() < MIN_HISTORY_DAYS:
         today["plan"] = None
         return today
-    quantile = 1 - confidence
-    by_band = history.groupby("band", observed=True).error.quantile(quantile)
-    margin = today.band.map(by_band).astype(float).fillna(history.error.quantile(quantile))
-    today["plan"] = (today.forecast + margin).round()
+    bands = history.groupby("band", observed=True).agg(
+        level=("forecast", "median"), margin=("error", lambda error: error.quantile(1 - confidence))
+    )
+    today["plan"] = (today.forecast + np.interp(today.forecast, bands.level, bands.margin)).round()
     return today
 
 
