@@ -7,7 +7,7 @@ import { Skeleton } from '@astryxdesign/core/Skeleton'
 import { Text } from '@astryxdesign/core/Text'
 import { VStack } from '@astryxdesign/core/VStack'
 import { useApi } from './api'
-import { mw } from './format'
+import { gapText, mw } from './format'
 
 const UK = 'Europe/London'
 const clock = new Intl.DateTimeFormat('en-GB', { timeZone: UK, hour: '2-digit', minute: '2-digit' })
@@ -24,12 +24,6 @@ const SERIES = [
   { key: 'actual', label: 'Actual' },
   { key: 'plan', label: 'Plan' },
 ]
-
-function gapText(error) {
-  if (error < 0) return `Wind came in ${mw(error)} below forecast`
-  if (error > 0) return `Wind came in ${mw(error)} above forecast`
-  return 'Wind matched the forecast'
-}
 
 function Swatch({ series }) {
   return (
