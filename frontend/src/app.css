@@ -292,7 +292,7 @@ body {
 }
 
 /* Phones: the tooltip docks full width above the plot, where a finger on the plot doesn't cover it and the card doesn't
-   clip it. */
+   clip it; every other day label and the 3-hourly time labels rest. */
 @media (max-width: 640px) {
   .chart-tip,
   .chart-tip[data-flip],
@@ -304,6 +304,13 @@ body {
     bottom: calc(100% + 8px);
     min-width: 0;
     transform: none;
+  }
+  .bars,
+  .bars-x {
+    gap: 2px;
+  }
+  [data-minor]:not([data-picked]) {
+    visibility: hidden;
   }
 }
 

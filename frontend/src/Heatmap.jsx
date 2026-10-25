@@ -100,8 +100,14 @@ export function Heatmap({ days, selectedDay, onSelectDay }) {
             }),
           ])}
           <span />
-          {days.map((day) => (
-            <span key={day} className="heat-x" data-picked={day === selectedDay || undefined} aria-hidden="true">
+          {days.map((day, d) => (
+            <span
+              key={day}
+              className="heat-x"
+              data-picked={day === selectedDay || undefined}
+              data-minor={d % 2 || undefined}
+              aria-hidden="true"
+            >
               {Number(day.slice(8))}
             </span>
           ))}

@@ -86,7 +86,13 @@ function Plot({ hours, label }) {
       ))}
       {hours.map((h, i) =>
         i % 3 ? null : (
-          <span key={h.startTime} className="chart-x" style={{ left: `${x(i)}%` }} aria-hidden="true">
+          <span
+            key={h.startTime}
+            className="chart-x"
+            style={{ left: `${x(i)}%` }}
+            data-minor={i % 6 || undefined}
+            aria-hidden="true"
+          >
             {clock.format(new Date(h.startTime))}
           </span>
         ),

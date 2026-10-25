@@ -138,8 +138,13 @@ export function PlanBars({ confidence, selectedDay, onSelectDay }) {
             </div>
           </div>
           <div className="bars-x" style={{ '--bars': data.length }} aria-hidden="true">
-            {data.map((d) => (
-              <span key={d.day} className="heat-x" data-picked={d.day === selectedDay || undefined}>
+            {data.map((d, i) => (
+              <span
+                key={d.day}
+                className="heat-x"
+                data-picked={d.day === selectedDay || undefined}
+                data-minor={i % 2 || undefined}
+              >
                 {Number(d.day.slice(8))}
               </span>
             ))}
