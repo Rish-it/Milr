@@ -27,6 +27,10 @@ body {
     max-height: none;
   }
 }
+/* DateInput opens its calendar flush against the field; leave a gap. */
+.astryx-date-input [popover] {
+  margin-block-start: 8px;
+}
 
 /* Chart series: told apart by grey value, weight and dash, never by hue. */
 .series {
