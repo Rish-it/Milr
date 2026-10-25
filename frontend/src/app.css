@@ -194,8 +194,7 @@ body {
   border-radius: 4px;
 }
 .heat-cell,
-.heat-key,
-.candle {
+.heat-key {
   --low: var(--heat-low);
   --high: var(--heat-high);
   --cell: color-mix(in oklch, var(--high) var(--p), var(--low));
@@ -211,8 +210,7 @@ body {
   height: 14px;
 }
 .heat-cell.above,
-.heat-key.above,
-.candle.above {
+.heat-key.above {
   --low: var(--cool-low);
   --high: var(--cool-high);
 }
@@ -248,8 +246,7 @@ body {
   }
 }
 
-/* Daily plan candles: each runs from the day's average forecast to its average actual, shaded on the heatmap's scale,
-   with the plan as a tick. Candles not being read step back toward the card, never by opacity. */
+/* Daily plan bars: each segment is its own box; bars not being read step back toward the card, never by opacity. */
 .bars-frame {
   display: flex;
   flex: 0 1 auto;
@@ -257,7 +254,7 @@ body {
   min-height: 0;
   margin: 8px 0 0 48px;
 }
-.bars-frame[aria-busy] .bar {
+.bars-frame[aria-busy] .bar-seg {
   --strength: 60%;
 }
 .bars {
@@ -283,46 +280,54 @@ body {
 }
 .bar {
   position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
   border-radius: 4px;
 }
 .bar[data-lit] {
   background: var(--color-overlay-hover);
 }
-.candle,
-.candle-wick,
-.candle-plan {
-  position: absolute;
-  transition-property: bottom, height;
-  transition-duration: 300ms;
-  transition-timing-function: ease-out;
-  transition-delay: calc(var(--i) * 12ms);
-}
-.candle {
-  left: 20%;
-  right: 20%;
-  min-height: 4px;
-  border-radius: 3px;
-  background: color-mix(in oklab, var(--cell) var(--strength, 100%), var(--color-background-card));
-}
-.candle-wick {
-  left: calc(50% - 1px);
-  width: 2px;
-  background: color-mix(in oklab, var(--chart-plan) var(--strength, 100%), var(--color-background-card));
-}
-.candle-plan,
-.plan-key {
-  height: 3px;
+.bar-seg,
+.bar-key {
+  --seg: var(--sea-plan);
   border-radius: 2px;
-  background: color-mix(in oklab, var(--chart-actual) var(--strength, 100%), var(--color-background-card));
+  background: color-mix(in oklab, var(--seg) var(--strength, 100%), var(--color-background-card));
 }
-.candle-plan {
-  left: 4%;
-  right: 4%;
+.bar-seg {
+  transition: height 300ms ease-out calc(var(--i) * 12ms);
+}
+.bar-key {
+  width: 14px;
+  height: 14px;
+}
+.margin {
+  --seg: var(--sea-margin);
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--seg) var(--strength, 100%), var(--color-background-card)) 0 2px,
+    transparent 2px 5px
+  );
+}
+.unplanned {
+  --seg: color-mix(in oklab, var(--chart-forecast) 45%, var(--color-background-card));
+}
+.bar-actual,
+.bar-key.actual {
+  --seg: var(--chart-actual);
+}
+.bar-actual {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  height: 3px;
   transform: translateY(50%);
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--seg) var(--strength, 100%), var(--color-background-card));
   box-shadow: 0 0 0 2px var(--color-background-card);
 }
-.plan-key {
-  width: 14px;
+.bar-key.actual {
+  height: 3px;
 }
 .bars[data-active] .bar:not([data-lit]) {
   --strength: 35%;
@@ -331,9 +336,7 @@ body {
   top: 0;
 }
 @media (prefers-reduced-motion: reduce) {
-  .candle,
-  .candle-wick,
-  .candle-plan {
+  .bar-seg {
     transition: none;
   }
 }
