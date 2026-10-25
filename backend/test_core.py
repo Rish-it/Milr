@@ -47,3 +47,12 @@ def test_backtest_scores_only_days_with_enough_history():
         "forecast": {"covered": 0.0, "avg_shortfall_mw": 100},
         "plan": {"covered": 1.0, "avg_shortfall_mw": 0},
     }
+
+
+def test_plan_has_no_jump_where_the_forecast_crosses_a_band_edge():
+    # Calm hours missed by 1,000 MW, windy ones by 3,000 MW; tomorrow straddles the 8 GW edge between them.
+    history = pd.concat([one_hour_per_day([-1_000] * 8, forecast=6_000), one_hour_per_day([-3_000] * 8, forecast=10_000)])
+    history["band"] = ["<8 GW"] * 8 + ["8-12 GW"] * 8
+    tomorrow = pd.DataFrame({"day": "2026-01-10", "band": ["<8 GW", "8-12 GW"], "forecast": [7_990, 8_010]})
+    below, above = plan(pd.concat([history, tomorrow]), "2026-01-10", confidence=0.9).plan
+    assert abs(above - below) < 50
