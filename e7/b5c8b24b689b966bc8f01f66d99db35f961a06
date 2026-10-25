@@ -1,0 +1,23 @@
+backend/fetch.py
+  s_1bb59782262abf::t_6df1fc33677161 1-34
+backend/data/forecast.json
+  s_1bb59782262abf::t_1a3f95be6aba27 1
+backend/data/actual.json
+  s_1bb59782262abf::t_1a3f95be6aba27 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e7b5c8b24b689b966bc8f01f66d99db35f961a06",
+  "prompts": {},
+  "sessions": {
+    "s_1bb59782262abf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b4b0aa3c-bddb-416b-88af-bc3bab38c2fa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
