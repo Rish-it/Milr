@@ -111,4 +111,4 @@ The live app runs on Vercel as one FastAPI function, with the built frontend ser
 
 ## Use of AI tools
 
-AI coding assistants were used throughout: Claude Code for implementation, data checks, testing and review, and ChatGPT for explanations of the domain and the analysis. Every result in this README was checked against the data, and all code is covered by the tests above.
+I used AI coding assistants: Claude Code to write code to my direction, and ChatGPT to talk through the domain. The decisions were mine: the scope, the 11:00 decision cutoff, the analysis and safety-margin approach, and the UI direction and component references. I reviewed and manually tested every pull request before merging it.
