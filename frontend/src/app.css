@@ -137,3 +137,7 @@ body {
     transition: none;
   }
 }
+
+.kpi-frame[aria-busy] {
+  opacity: 0.6;
+}
