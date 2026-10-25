@@ -9,6 +9,7 @@ import { Text } from '@astryxdesign/core/Text'
 import { VStack } from '@astryxdesign/core/VStack'
 import { useApi } from './api'
 import { DayChart } from './DayChart'
+import { Kpis } from './Kpis'
 
 export default function App() {
   const summary = useApi('/api/summary')
@@ -54,7 +55,10 @@ export default function App() {
       {summary.error ? (
         <EmptyState title="Could not load the January data" description={summary.error} />
       ) : summary.data ? (
-        <DayChart day={day} confidence={confidence} />
+        <>
+          <Kpis accuracy={summary.data.accuracy} confidence={confidence} />
+          <DayChart day={day} confidence={confidence} />
+        </>
       ) : (
         <Skeleton height={48} />
       )}
