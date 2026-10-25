@@ -13,6 +13,7 @@ export const milrTheme = defineTheme({
     '--color-background-popover': ['#ffffff', '#262626'],
     '--color-text-secondary': ['#525252', '#a3a3a3'],
     '--color-border': ['transparent', 'transparent'],
+    '--color-border-emphasized': ['transparent', 'transparent'],
   },
   localTokens: {
     // Chart series, each at least 3:1 against the card in both modes.
