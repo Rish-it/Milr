@@ -11,6 +11,7 @@ import { useApi } from './api'
 import { DayChart } from './DayChart'
 import { Heatmap } from './Heatmap'
 import { Kpis } from './Kpis'
+import { PlanBars } from './PlanBars'
 
 export default function App() {
   const summary = useApi('/api/summary')
@@ -66,6 +67,7 @@ export default function App() {
           <div ref={chart}>
             <DayChart day={day} confidence={confidence} />
           </div>
+          <PlanBars confidence={confidence} selectedDay={day} onSelectDay={openDay} />
           <Heatmap days={days} selectedDay={day} onSelectDay={openDay} />
         </>
       ) : (
