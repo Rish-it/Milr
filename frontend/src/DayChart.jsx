@@ -144,8 +144,9 @@ export function DayChart({ day, confidence }) {
       <VStack gap={1}>
         <Heading level={2}>Forecast vs actual</Heading>
         <Text color="secondary">
-          Forecast published {published.format(new Date(hours[0].publishTime))} UK, the newest before the 11:00
-          deadline the day before. The plan is the forecast less a safety margin learned from past errors.
+          Forecast published {published.format(new Date(hours[0].publishTime))} UK, the newest before the 09:50
+          deadline the day before. The plan is the forecast less a safety margin learned from past errors: count on
+          the plan for wind and buy the rest of your demand elsewhere.
         </Text>
       </VStack>
       <HStack gap={4} wrap="wrap">
