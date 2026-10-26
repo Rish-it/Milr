@@ -1,0 +1,21 @@
+backend/test_core.py
+  s_1bb59782262abf::t_3f226383cbea50 15-16,21-23,37
+backend/core.py
+  s_1bb59782262abf::t_0ccb5878fb167f 16-17,28-30,32,70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b526fdd62060982e77cfc1accb5ee09c199c24d3",
+  "prompts": {},
+  "sessions": {
+    "s_1bb59782262abf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b4b0aa3c-bddb-416b-88af-bc3bab38c2fa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
