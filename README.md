@@ -6,9 +6,9 @@ A decision-support dashboard for a UK utility's day-ahead power buyers. It shows
 
 ## What it answers
 
-Buyers order tomorrow's power by about 11:00 UK today, so they rely on the wind forecast available at that moment. For every delivery hour of the period:
+Buyers order tomorrow's power by 09:50 UK today, so they rely on the wind forecast available at that moment. For every delivery hour of the period:
 
-1. **Which forecast did they see?** The newest Elexon `WINDFOR` forecast published before 11:00 UK on the day before delivery. Anything published later is excluded.
+1. **Which forecast did they see?** The newest Elexon `WINDFOR` forecast published before 09:50 UK on the day before delivery. Anything published later is excluded.
 2. **How good was it?** That forecast is compared with Elexon `FUELHH` wind actuals and scored with MAE, RMSE and bias, overall, by wind level and by hour (hour of day doubles as forecast horizon, 14.5 to 37.5 hours ahead).
 3. **How much wind should they plan on?** A plan equal to the forecast minus a safety margin, learned from past errors at a similar wind level, for a confidence the buyer picks.
 
@@ -98,7 +98,7 @@ Dockerfile           Builds the frontend, then runs it with the API in one image
 
 ## Method and assumptions
 
-- **Deadline:** 11:00 UK time on the day before delivery, computed on the UK wall clock so it stays right across clock changes (tested for summer time). It is a parameter in `core.latest_forecast`.
+- **Deadline:** 09:50 UK time on the day before delivery, the gate closure of [Nord Pool's N2EX GB day-ahead auction](https://support.nordpoolgroup.com/support/solutions/articles/8000088463-about-the-n2ex-day-ahead-auction) since January 2021 (it was 11:00 before Brexit). It is computed on the UK wall clock so it stays right across clock changes (tested for summer time), and is `core.DEADLINE`. EPEX's GB auction closes earlier, at 09:20; with that deadline every January hour would use the 07:30 forecast instead of the 09:30 one, and MAE would be 2,022 MW rather than 1,996.
 - **Time resolution:** forecasts are hourly and actuals half-hourly, so forecasts are matched to the on-the-hour actual. Averaging the two half-hours instead changes MAE by under 2%.
 - **Error sign:** `error = actual - forecast`; negative means wind came in below forecast.
 - **Plan:** for each wind band (under 8, 8 to 12, 12 to 16, over 16 GW of forecast), the margin is the error quantile matching the chosen confidence, placed at the band's typical forecast and interpolated between bands so it changes smoothly with wind.
@@ -111,4 +111,4 @@ The live app runs on Vercel as one FastAPI function, with the built frontend ser
 
 ## Use of AI tools
 
-I used AI coding assistants: Claude Code to write code to my direction, and ChatGPT to talk through the domain. The decisions were mine: the scope, the 11:00 decision cutoff, the analysis and safety-margin approach, and the UI direction and component references. I reviewed and manually tested every pull request before merging it.
+I used AI coding assistants: Claude Code to write code to my direction, and ChatGPT to talk through the domain. The decisions were mine: the scope, the 09:50 decision deadline, the analysis and safety-margin approach, and the UI direction and component references. I reviewed and manually tested every pull request before merging it.
