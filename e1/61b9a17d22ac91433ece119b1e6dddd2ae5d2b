@@ -1,0 +1,23 @@
+frontend/src/App.jsx
+  s_1bb59782262abf::t_178eb42f25345e 41
+frontend/src/DayChart.jsx
+  s_1bb59782262abf::t_7556a22f3675d1 147-149
+frontend/src/Kpis.jsx
+  s_1bb59782262abf::t_8dd6c7568cf4f7 51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e161b9a17d22ac91433ece119b1e6dddd2ae5d2b",
+  "prompts": {},
+  "sessions": {
+    "s_1bb59782262abf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b4b0aa3c-bddb-416b-88af-bc3bab38c2fa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Rishit Sharma <rishitsharmar89@gmail.com>"
+    }
+  }
+}
