@@ -48,7 +48,7 @@ export function Kpis({ accuracy, bands, confidence }) {
       <VStack gap={1}>
         <Heading level={2}>January at a glance</Heading>
         <Text color="secondary">
-          {accuracy.hours} delivery hours, each scored against the newest forecast published before 11:00 UK the day
+          {accuracy.hours} delivery hours, each scored against the newest forecast published before 09:50 UK the day
           before.
         </Text>
       </VStack>

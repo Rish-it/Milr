@@ -13,6 +13,8 @@ UK = "Europe/London"
 BANDS = [0, 8000, 12000, 16000, float("inf")]
 BAND_LABELS = ["<8 GW", "8-12 GW", "12-16 GW", "16+ GW"]
 MIN_HISTORY_DAYS = 7
+# Nord Pool N2EX GB day-ahead gate closure, UK time; EPEX's GB auction closes earlier, at 09:20.
+DEADLINE = pd.Timedelta(hours=9, minutes=50)
 
 
 def load(name):
@@ -23,11 +25,11 @@ def load(name):
     return df
 
 
-def latest_forecast(forecast, cutoff_hour=11):
-    """Per target hour, the newest forecast published before cutoff_hour (UK time) on the day before delivery."""
-    # Wall-clock arithmetic in UK time, so the cutoff stays at 11:00 across clock changes.
+def latest_forecast(forecast, deadline=DEADLINE):
+    """Per target hour, the newest forecast published before the deadline (UK time) on the day before delivery."""
+    # Wall-clock arithmetic in UK time, so the deadline keeps its UK time across clock changes.
     delivery_day = forecast.startTime.dt.tz_convert(UK).dt.tz_localize(None).dt.normalize()
-    cutoff = (delivery_day - pd.Timedelta(days=1) + pd.Timedelta(hours=cutoff_hour)).dt.tz_localize(UK)
+    cutoff = (delivery_day - pd.Timedelta(days=1) + deadline).dt.tz_localize(UK)
     visible = forecast[forecast.publishTime < cutoff.dt.tz_convert("UTC")]
     return visible.sort_values("publishTime").groupby("startTime").tail(1).sort_values("startTime")
 
@@ -65,7 +67,7 @@ def plan(compared, day, confidence):
     Each wind band's quantile sits at the band's typical forecast, and the margin is interpolated between them,
     so the plan moves smoothly instead of jumping when the forecast crosses a band edge.
 
-    Only days fully delivered by the decision (11:00 the day before) count as history,
+    Only days fully delivered by the decision (09:50 the day before) count as history,
     so the margin never learns from the outcome it is planning for.
     """
     today = compared[compared.day == day].copy()

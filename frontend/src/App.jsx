@@ -38,7 +38,7 @@ export default function App() {
             <VStack gap={1}>
               <Heading level={1}>Day-ahead wind</Heading>
               <Text color="secondary">
-                The forecast you could see at 11:00 UK the day before, and how far to trust it.
+                The forecast you could see at the 09:50 UK deadline the day before, and how far to trust it.
               </Text>
             </VStack>
             <HStack gap={4} wrap="wrap" vAlign="end">
